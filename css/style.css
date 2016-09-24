@@ -1,0 +1,25 @@
+html {
+	font-family: arial;
+}
+
+.frontpagetitle {
+	text-align: center;
+}
+
+.ai-container {
+	border : 2px solid red;
+	max-width: 700px;
+	padding: 2em;
+	margin: auto;
+}
+
+.text-centered {
+	text-align: center;
+}
+
+.button {
+	margin: 0.2em;
+	width: 20%;
+	text-align: center;
+	padding: 0.3em;
+}
