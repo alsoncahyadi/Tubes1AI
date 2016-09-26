@@ -2,6 +2,19 @@ html {
 	font-family: arial;
 }
 
+th,td {
+	max-width: 1em;
+}
+
+th {
+	font-weight: bold;
+}
+
+strong, span {
+	position: relative;
+	z-index: -1;
+}
+
 .frontpagetitle {
 	text-align: center;
 }
@@ -22,4 +35,45 @@ html {
 	width: 20%;
 	text-align: center;
 	padding: 0.3em;
+}
+
+.tabledefault {
+	padding: 0.8em;
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+.tablejam {
+	border: 2px solid black;
+	text-align: right;
+	width: 7em;
+	font-weight: bold;
+}
+
+.matkul {
+	color: #980000;
+}
+
+.ruangan {
+	color: #4a86e8;
+}
+
+#result {
+	width: 80%;
+	margin: auto;
+}
+
+.data {
+	cursor: pointer;
+	position: relative;
+	z-index: 100;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.data:hover {
+	font-weight: bolder;
+}
+
+.resulttitle{
+	text-align: center;
 }
