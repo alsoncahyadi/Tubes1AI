@@ -227,6 +227,20 @@ $tuple = array();//Isi: 0-tempat; 1- waktu
 //$langkah = 5000;
 $T = 1000;
 
+function checkMultiple($arrayRuangan, $indexMatkul,$indexRuangan){//total jumlah jam tempat yg nabrak
+	$jml=0;
+	for ($i=0;$i<sizeof($indexRuangan); $i++){//ruangan
+		for ($j=0; $j<sizeof($arrayRuangan[0][0]); $j++){//jam
+			$nabrak = -1;
+			for ($k=0; $k<sizeof($indexMatkul);$k++){//matkul
+				if ($arrayRuangan[$i][$k][$j][1]==1) $nabrak++;
+			}
+			if ($nabrak>0) $jml++;
+		}
+	}
+	return $jml;
+}
+
 function generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget){//untuk mengenerate random state diawal operasi SA
 	
 	//cleanse
@@ -272,12 +286,12 @@ function varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul){//Menghitung durasi p
 }
 
 function countEnergy($arrayRuangan, $indexMatkul, $indexRuangan){//Menghitung energi	
-	$energy = 0;
-	for($k=0;$k<sizeof($indexRuangan);$k++){
+	$energy = checkMultiple($arrayRuangan, $indexMatkul,$indexRuangan);
+	/*for($k=0;$k<sizeof($indexRuangan);$k++){
 		$energy += cekBentrok($arrayRuangan,sizeof($indexRuangan),sizeof($indexMatkul),$indexRuangan[$k],$indexRuangan);
 	}
 	$energy+=cekKesalahan($arrayRuangan,sizeof($indexRuangan),sizeof($indexMatkul));
-	return ($energy);
+	*/return ($energy);
 }
 
 function collectDomain($arrayRuangan, $idxMatkul, $indexRuangan, $arrayTarget){//Menciptakan array berisi domain matkul (tempat waktu)
@@ -392,18 +406,18 @@ function SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarge
 //Menghitung durasi per matkul dan menyimpan datanya di arrayMJ
 $arrayMJ = varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul); 
 
-//Membangkitkan state atau solusi random
-$arrayRuangan = generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 
+//Membangkitkan state atau solusi random
+	$arrayRuangan = generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 //Simulated anneling
-$arrayRuangan = SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
-$arrayRuangan = SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
+	$arrayRuangan = SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 
 //passing
 session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan; 
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
+	$_SESSION["jml"] = checkMultiple($arrayRuangan, $indexMatkul,$indexRuangan);
 	header("Location: Result.php");
  exit();
 ?>
