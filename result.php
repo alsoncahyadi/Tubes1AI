@@ -55,8 +55,8 @@
 	}
 
  //DEBUG PURPOSES ONLY
-	array_push($arrayHari[1][0]["arrayMatkul"], $indexMatkul[1]);
-	array_push($arrayHari[1][0]["arrayRuangan"], $indexRuangan[3]);
+	//array_push($arrayHari[1][0]["arrayMatkul"], $indexMatkul[1]);
+	//array_push($arrayHari[1][0]["arrayRuangan"], $indexRuangan[3]);
 /*
 	array_push($arrayHari[2][0]["arrayMatkul"], $indexMatkul[1]);
 	array_push($arrayHari[2][0]["arrayRuangan"], $indexRuangan[1]);
@@ -72,7 +72,9 @@
 		foreach($hari as $idxJam => $jam) {
 			$arrayHari[$idxHari][$idxJam]["rawHtml"] = "";
 			foreach($jam["arrayMatkul"] as $idxArray => $matkul) {
-				$arrayHari[$idxHari][$idxJam]["rawHtml"] .= "<div class='data " . $jam["arrayMatkul"][$idxArray] ."'><strong>( </strong><span class='matkul'>" . $jam["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" . $jam["arrayRuangan"][$idxArray] . "</span></div>";
+				$arrayHari[$idxHari][$idxJam]["rawHtml"] .= "<div class='data " . 
+				$jam["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . $jam["arrayMatkul"][$idxArray] . " <" . 
+				$jam["arrayIdxMatkul"][$idxArray] . ">" . "</span><strong> )</strong> - <span class='ruangan'>" . $jam["arrayRuangan"][$idxArray] . "</span></div>";
 			}
 		}
 	}
@@ -94,17 +96,23 @@
 				
 				<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
 
-				<td class="tabledefault" id= <?php echo "senin" . $idxJam ?>><?php echo $arrayHari[0][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault" id= <?php echo "selasa" . $idxJam ?>><?php echo $arrayHari[1][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault" id= <?php echo "rabu" . $idxJam ?>><?php echo $arrayHari[2][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault" id= <?php echo "kamis" . $idxJam ?>><?php echo $arrayHari[3][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault" id= <?php echo "jumat" . $idxJam ?>><?php echo $arrayHari[4][$idxJam]["rawHtml"] ?></td>
+				<td class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam ?>><?php echo $arrayHari[0][$idxJam]["rawHtml"] ?></td>
+				<td class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam ?>><?php echo $arrayHari[1][$idxJam]["rawHtml"] ?></td>
+				<td class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam ?>><?php echo $arrayHari[2][$idxJam]["rawHtml"] ?></td>
+				<td class="tabledefault tableharijam" id= <?php echo "kamis" . $idxJam ?>><?php echo $arrayHari[3][$idxJam]["rawHtml"] ?></td>
+				<td class="tabledefault tableharijam" id= <?php echo "jumat" . $idxJam ?>><?php echo $arrayHari[4][$idxJam]["rawHtml"] ?></td>
 			</tr>
 			<?php } ?>
 		</table>
 		<br>
-		<h2>Change Matkul</h2>
-		<input type="text" name="changeMatkul" id="changeMatkul">
+		<form action="modifyJadwal.php" method="post">
+			<h2>Change Matkul</h2>
+			Matkul yang ingin dipindah:&nbsp;
+			<input type="text" name="changeMatkul" id="changeMatkul"> <br>
+			Pindahkan ke:&nbsp;
+			<input type="text" name="pindahKe" id="pindahKe"> <br>
+			<input type="submit">
+		</form>
 	</div>
 </body>
 
