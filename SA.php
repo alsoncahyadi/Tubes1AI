@@ -201,11 +201,6 @@ function cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRuan
     return($count);
 }
 
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7603",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7610",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"Labdas2",$indexRuangan) . "<br>";
-
 function persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRuangan) {
     $idxRuangan = array_search($namaRuangan,$indexRuangan);
     $terisi = 0;
@@ -222,13 +217,6 @@ function persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRu
     return(($terisi + 0.0)/$total);
 }
 
-function cekBentrokRJ($arrayRuangan, $indexMatkul, $ruangan, $waktu){
-	$jmlcrash=-1;
-	for ($i=0;$i<sizeof($indexMatkul);$i++){
-		$jmlcrash += $arrayRuangan[$ruangan][$i][$waktu][1];
-	}
-	return $jmlcrash;
-}
 
 //============FUNGSI-FUNGSI SA==============================================
 
@@ -236,10 +224,13 @@ function cekBentrokRJ($arrayRuangan, $indexMatkul, $ruangan, $waktu){
 $arrayTarget = array();//Isi: domain (waktu&tempat)
 $arrayMJ = array();//Isi: variabel mk-durasi MJ[][0]=durasi
 $tuple = array();//Isi: 0-tempat; 1- waktu
-$T = 500;
+//$langkah = 5000;
+$T = 1000;
 
-function generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget){
-	for ($i=0; $i<sizeof($indexRuangan);$i++){//cleanse
+function generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget){//untuk mengenerate random state diawal operasi SA
+	
+	//cleanse
+	for ($i=0; $i<sizeof($indexRuangan);$i++){
 		for ($j=0; $j< sizeof($indexMatkul); $j++){
 			for ($k=0; $k< sizeof($arrayRuangan[$i][$j]); $k++){
 				$arrayRuangan[$i][$j][$k][1]=0;
@@ -247,10 +238,11 @@ function generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayM
 		}
 	}
 	
+	//placement
 	for ($i=0;$i<sizeof($indexMatkul);$i++){
 		$arrayTarget = collectDomain($arrayRuangan, $i, $indexRuangan, $arrayTarget);
 		//waktu&tempat random
-		$randVal = rand(0, sizeof($arrayTarget[$i]));
+		$randVal = rand(0, sizeof($arrayTarget[$i])-1);
 		$ruangan = $arrayTarget[$randVal][0];
 		$waktu = $arrayTarget[$randVal][1];
 		
@@ -264,23 +256,7 @@ function generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayM
 	return $arrayRuangan;
 }
 
-function checkRepeated($arrayA){
-	$i =0;
-	$same =true;
-	
-	while ($i<sizeof($arrayA)&& ($same==true)){
-		$j=$i+1;
-		while ($j<sizeof($arrayA) && ($same==true)){
-			if ($arrayA[$i]==$arrayA[$j]) $same =false;
-			else $j++;
-		}
-		$i++;
-	}
-	return $same;
-}
-
-function varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul){
-	$k=0;
+function varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul){//Menghitung durasi permatkul dan menyimpan datanya di array
 	for ($k=0;$k<sizeof($indexMatkul);$k++){
 		$jml = 0;
 		$i =0;
@@ -295,7 +271,7 @@ function varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul){
 	return $arrayMJ;
 }
 
-function countEnergy($arrayRuangan, $indexMatkul, $indexRuangan){
+function countEnergy($arrayRuangan, $indexMatkul, $indexRuangan){//Menghitung energi	
 	$energy = 0;
 	for($k=0;$k<sizeof($indexRuangan);$k++){
 		$energy += cekBentrok($arrayRuangan,sizeof($indexRuangan),sizeof($indexMatkul),$indexRuangan[$k],$indexRuangan);
@@ -304,14 +280,12 @@ function countEnergy($arrayRuangan, $indexMatkul, $indexRuangan){
 	return ($energy);
 }
 
-function collectDomain($arrayRuangan, $idxMatkul, $indexRuangan, $arrayTarget){
+function collectDomain($arrayRuangan, $idxMatkul, $indexRuangan, $arrayTarget){//Menciptakan array berisi domain matkul (tempat waktu)
 	$idx=0;
-	
 	for ($k=0;$k<sizeof($indexRuangan); $k++){//telusurin ruangan
 		for ($l=0; $l<sizeof($arrayRuangan[$k][$idxMatkul]); $l++){//telusurin waktu
 			
 			if ($arrayRuangan[$k][$idxMatkul][$l][0] == 1){
-				
 				array_push($arrayTarget, array());
 				array_push($arrayTarget[$idx],array());
 				
@@ -324,44 +298,39 @@ function collectDomain($arrayRuangan, $idxMatkul, $indexRuangan, $arrayTarget){
 	return $arrayTarget;
 }
 
-function countProb($temperature, $frmE, $crrE){
-	return exp(-($crrE-$frmE)/$temperature);
+function countProb($T, $frmE, $crrE){//ngitung peluang perpindahan
+	return exp(-($crrE-$frmE)/$T);
 }
 
-function decision($T, $arrayRuangan, $idxMatkul, $idxRuangan, $waktu, $indexMatkul, $indexRuangan, $tuple, $arrayMJ){
+function decision($T, $arrayRuangan, $idxMatkul, $idxRuangan, $waktu, $indexMatkul, $indexRuangan, $tuple, $arrayMJ){//Menentukan apakah matkul pindah jadwal/ngga, kalau memungkinkan, dipindah
 	//save former state
 	$formerEnergy 	= countEnergy($arrayRuangan, $indexMatkul, $indexRuangan);
 	$tuple = searchPosition($arrayRuangan, $indexRuangan, $idxMatkul, $tuple);
+	
 	$formerPlace = $tuple[0];
 	$formerTime = $tuple[1];
-	
+		
 	//trial-move
 	$arrayRuangan = moveMatkul($idxRuangan, $waktu, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
 	$currEnergy 	= countEnergy($arrayRuangan, $indexMatkul, $indexRuangan);
-	
-	if ($formerEnergy < $currEnergy)
+
+	if ($formerEnergy <= $currEnergy)
 	{
-		echo "cuy";
-		if (countProb($T,$formerEnergy,$currEnergy)*10 < rand(0,10)){
-		$arrayRuangan = moveMatkul($formerPlace, $formerTime, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
-		echo "uno";
-		}else echo "dos";
-		
-	}else echo "achoo";
-	//turunin suhu
+		if ($T>0 && countProb($T,$formerEnergy,$currEnergy)*10 < mt_rand(0,10)){//return
+			$arrayRuangan = moveMatkul($formerPlace, $formerTime, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
+		}else if ($T<=0)
+			$arrayRuangan = moveMatkul($formerPlace, $formerTime, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
+	}
 	return $arrayRuangan;
 }
 
-function searchPosition($arrayRuangan, $indexRuangan, $idxMatkul, $tuple){
-	
+function searchPosition($arrayRuangan, $indexRuangan, $idxMatkul, $tuple){//Mencari posisi waktu dan tempat
 	$found=false;
 	$i = 0;
 	$waktu =0 ;
-	$batas = 55;
 	
 	for ($k=0;$k<sizeof($indexRuangan); $k++){//telusurin ruangan
 		for ($l=0; $l<sizeof($arrayRuangan[$k][$idxMatkul]); $l++){//telusurin waktu
-			
 			if ($arrayRuangan[$k][$idxMatkul][$l][1] == 1 && $found==false){
 				$found = true;
 				$i=$k;
@@ -369,44 +338,47 @@ function searchPosition($arrayRuangan, $indexRuangan, $idxMatkul, $tuple){
 			}
 		}
 	}
-	$tuple[0]=$i;
-	$tuple[1]=$waktu;
+	$tuple[0]=$i; //tempat
+	$tuple[1]=$waktu;//waktu
 	return $tuple;
 	
 }
 
-function moveMatkul($tTempat, $tWaktu, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul){
-	
+function moveMatkul($tTempat, $tWaktu, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul){//Fungsi untuk memindahkan matkul dari suatu tempat, ke tempat baru $tTempat dengan waktu mulai = $tWaktu 
 	$tuple = searchPosition($arrayRuangan, $indexRuangan, $idxMatkul, $tuple);
 	$iterasi = $tuple[1];
+	$valid = true;
 	//clearing
 	for($i=0; $i<$arrayMJ[$idxMatkul]; $i++){
 		$arrayRuangan[$tuple[0]][$idxMatkul][$iterasi][1] = 0;
 		$iterasi++;
 	}
-
 	//placement
 	for($i=0; $i<$arrayMJ[$idxMatkul]; $i++){
 		$arrayRuangan[$tTempat][$idxMatkul][$tWaktu][1] = 1;
 		$tWaktu++;
 	}
-
 	return $arrayRuangan;
 }
 
-function SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ){
-	$currMatkul = rand(0, sizeof($indexMatkul));
-	$tuple = searchPosition($arrayRuangan, $indexRuangan, $currMatkul, $tuple);
-	$step = 0;//posisi waktu target;
-	
-	while ($T!=0) {
-		$arrayTarget = collectDomain($arrayRuangan, $currMatkul, $indexRuangan, $arrayTarget);//cari domain tempat&waktu
-		$step = rand(0, sizeof($arrayTarget)-1);//nyari tempat&waktu
-		
-		$arrayRuangan = decision($T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
+function SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ){//Fungsi utama SA (tidak termasuk pembangkitan random di awal)
+	$step = array();//posisi waktu target;
 
+	while ($T!=-500) 
+	{
 		$currMatkul = rand(0, sizeof($indexMatkul)-1);
-
+		$arrayTarget = collectDomain($arrayRuangan, $currMatkul, $indexRuangan, $arrayTarget);//cari domain tempat&waktu
+		$valid = false;
+		while ($valid == false){//domain valid check
+			$step = mt_rand(0, sizeof($arrayTarget) - 1);//nyari tempat&waktu
+			$batas = $arrayTarget[$step][1]+$arrayMJ[$currMatkul];
+			if ($batas < sizeof($arrayRuangan[0][0]))
+				$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas-1][0] == 1);
+		}
+		$tuple = searchPosition($arrayRuangan, $indexRuangan, $currMatkul, $tuple);
+		$arrayRuangan = decision($T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
+		
+		//unset array of domain
 		unset($arrayTarget);
 		$arrayTarget = array();
 		$T -= 1;
@@ -415,74 +387,23 @@ function SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarge
 }
 
 
-$arrayMJ = varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul);
+//-----------------------------------MAIN SA------------------------------------------------------------------
 
+//Menghitung durasi per matkul dan menyimpan datanya di arrayMJ
+$arrayMJ = varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul); 
+
+//Membangkitkan state atau solusi random
 $arrayRuangan = generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 
-//$arrayRuangan = moveMatkul(1, 4, 1, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
-
-$tuple = searchPosition($arrayRuangan, $indexRuangan, 1, $tuple);
-
-echo $indexMatkul[1]." ".$indexRuangan[$tuple[0]]." ".$tuple[1]."<br>";
-
-for ($i=0;$i<sizeof($arrayMJ);$i++){
-	echo "<br>".$indexMatkul[$i]." - ".$arrayMJ[$i];
-}
-
-echo "<br>";
+//Simulated anneling
 $arrayRuangan = SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
-//$arrayRuangan = decision(1000, $arrayRuangan, 1, 2, 24, $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
+$arrayRuangan = SimAnneling($T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 
-echo "<br>".countEnergy($arrayRuangan, $indexMatkul, $indexRuangan);
-
+//passing
 session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan; 
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
 	header("Location: Result.php");
  exit();
-
-	
-
-	
-	
-	
-	
-	
-	
-///Exe------------------------------------------------------------------------------
-/*$arrayMJ = varMat_Jam($arrayMJ, $arrayRuangan, $indexMatkul, $indexRuangan);
-generateRandomStart($arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ)
-
-echo "<br>";
-for ($i=0;$i<sizeof($indexMatkul);$i++){
-	echo $indexMatkul[$i]." : ";
-	//for ($j=0 ; $j<sizeof($arrayMJ[$i]) ; $j++){
-		echo $arrayMJ[$i][0];
-	//}
-	echo "<br>";
-}
-*/
-
-
-/*echo "<br>Ruangan ke-0, matkul ke-0, apakah ada di waktu ke-0 = " . $arrayRuangan[0][0][0][1] . "<br>"; //ini kalo tau indexnya
-echo "Ruangan 7602, hari ke-3, waktu 9.00, apakah ada IF2150? " . $arrayRuangan[array_search("7602",$indexRuangan)][array_search("IF2150",$indexMatkul)][getIndex(3,"9.00")][1] . "<br>";
-
-echo "Ruangan 7602, hari ke-3, waktu 9.00, apakah boleh diisi IF2150? " . $arrayRuangan[array_search("7602",$indexRuangan)][array_search("IF2150",$indexMatkul)][getIndex(3,"9.00")][0] . "<br>";
-
-echo "Ruangan Labdas2, hari ke-4, waktu 13.00, apakah ada IF3130? " . $arrayRuangan[array_search("Labdas2",$indexRuangan)][array_search("IF3130",$indexMatkul)][getIndex(4,"13.00")][1] . "<br>";
-
-echo "Ruangan Labdas2, hari ke-4, waktu 13.00, apakah boleh diisi IF3130? " . $arrayRuangan[array_search("Labdas2",$indexRuangan)][array_search("IF3130",$indexMatkul)][getIndex(4,"13.00")][0] . "<br>";
-
-$arrayRuangan = SimAnneling($T,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget);
-$jmlRuangan = sizeof($indexRuangan);
-$jmlMatkul = sizeof($indexMatkul);
-echo "<br><br>7602 Bentrok = " . cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan) . "<br>";
-echo "7603 Bentrok = " . cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7603",$indexRuangan) . "<br>";
-echo "7610 Bentrok = " . cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7610",$indexRuangan) . "<br>";
-echo "Labdas 2 Bentrok = " . cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"Labdas2",$indexRuangan) . "<br>";
-*/
-
-//echo countEnergy($arrayRuangan, $indexMatkul, $indexRuangan);
-
 ?>
