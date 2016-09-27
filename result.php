@@ -54,10 +54,10 @@
 		}
 	}
 
-/* //DEBUG PURPOSES ONLY
+ //DEBUG PURPOSES ONLY
 	array_push($arrayHari[1][0]["arrayMatkul"], $indexMatkul[1]);
-	array_push($arrayHari[1][0]["arrayRuangan"], $indexRuangan[1]);
-
+	array_push($arrayHari[1][0]["arrayRuangan"], $indexRuangan[3]);
+/*
 	array_push($arrayHari[2][0]["arrayMatkul"], $indexMatkul[1]);
 	array_push($arrayHari[2][0]["arrayRuangan"], $indexRuangan[1]);
 
@@ -102,6 +102,9 @@
 			</tr>
 			<?php } ?>
 		</table>
+		<br>
+		<h2>Change Matkul</h2>
+		<input type="text" name="changeMatkul" id="changeMatkul">
 	</div>
 </body>
 

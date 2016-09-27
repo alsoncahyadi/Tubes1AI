@@ -5,11 +5,14 @@ $(document).ready(function(){
     	var initialColorName = "rgba(0, 0, 0, 0)";
     	var changeColorName = "rgb(0, 255, 0)";
 		//alert($(this).css("background-color"));
-		if ($(this).css("background-color") != changeColorName) {
-			$(this).css({"background-color": changeColorName, "border" : "1px solid black", "font-weight" : "bolder"});
-		} else {
-			$(this).css({"background-color": initialColorName, "border" : "0px", "font-weight" : "normal"});
-		}
+		$("." + matkulName).each(function() {
+			$('input[name=changeMatkul]').val(matkulName);
+			if ($(this).css("background-color") != changeColorName) {
+				$(this).css({"background-color": changeColorName, "border" : "1px solid black", "font-weight" : "bolder"});
+			} else {
+				$(this).css({"background-color": initialColorName, "border" : "0px", "font-weight" : "normal"});
+			}
+		});
     });
 });
 
