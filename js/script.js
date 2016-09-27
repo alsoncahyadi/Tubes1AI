@@ -24,12 +24,17 @@ $(document).ready(function(){
     	var changeColorName = "rgb(255, 255, 0)";
 		var hariJam = event.target.id;
 		//alert("table hari jam " + hariJam);
-		if ($(this).css("background-color") != changeColorName) {
-			$('input[name=pindahKe]').val(hariJam);
-			$(this).css({"background-color": changeColorName});
+		if ($(event.target).attr("class").indexOf("data") == -1) {
+		//	alert("MASUK");
+			if ($(this).css("background-color") != changeColorName) {
+				$('input[name=pindahKe]').val(hariJam);
+				$(this).css({"background-color": changeColorName});
+			} else {
+				$('input[name=pindahKe]').val("");
+				$(this).css({"background-color": initialColorName});
+			}
 		} else {
-			$('input[name=pindahKe]').val("");
-			$(this).css({"background-color": initialColorName});
+		//	alert("GAMASUK");
 		}
     });
 });
