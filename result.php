@@ -127,8 +127,8 @@
 			$arrayHari[$idxHari][$idxJam]["rawHtml"] = "";
 			foreach($jam["arrayMatkul"] as $idxArray => $matkul) {
 				$arrayHari[$idxHari][$idxJam]["rawHtml"] .= "<div class='data " . 
-				$jam["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . $jam["arrayMatkul"][$idxArray] . " <" . 
-				$jam["arrayIdxMatkul"][$idxArray] . ">" . "</span><strong> )</strong> - <span class='ruangan'>" . $jam["arrayRuangan"][$idxArray] . "</span></div>";
+				$jam["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" . 
+				$jam["arrayIdxMatkul"][$idxArray] . "] </strong>" . $jam["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" . $jam["arrayRuangan"][$idxArray] . "</span></div>";
 			}
 		}
 	}
