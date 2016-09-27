@@ -111,7 +111,11 @@ $_SESSION["arrayRuangan"] = $arrayRuangan;
 $_SESSION["indexruangan"] = $indexRuangan;
 $_SESSION["indexMatkul"] = $indexMatkul;
 
-header("Location: /aischeduling/result.php");
+$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+$url .= $_SERVER['SERVER_NAME'];
+$url .= $_SERVER['REQUEST_URI'];
+
+header("Location: " . dirname($url) . "/result.php");
 
 
 ?>

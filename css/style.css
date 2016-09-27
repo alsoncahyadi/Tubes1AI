@@ -77,3 +77,8 @@ strong, span {
 .resulttitle{
 	text-align: center;
 }
+
+.jumlahbentrok {
+	text-align: center;
+	color: red;
+}

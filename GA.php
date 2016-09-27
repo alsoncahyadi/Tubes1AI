@@ -6,8 +6,9 @@
 	$jmlRuangan = $_SESSION["jmlRuangan"];
 	$jmlMatkul = $_SESSION["jmlMatkul"];
 	*/
-	include "StrukturData(1).php";
-
+	include "readfile.php";
+	include "library.php";
+	
 	//Function untuk randomize
 	function randomize($min, $max, $add){
 		$sample = range($min, $max - 1, $add);
@@ -329,5 +330,17 @@
 	echo "7610 Terisi = " . $e = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,"7610",$indexRuangan) . "<br>";
 	echo "Labdas 2 Terisi = " . $r = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,"Labdas2",$indexRuangan) . "<br>";
 	echo "Total Terisi = " . ($q+$w+$e+$r);
+
+	session_start();
+	$_SESSION["arrayRuangan"] = $arrayRuangan;
+	$_SESSION["indexRuangan"] = $indexRuangan;
+	$_SESSION["indexMatkul"] = $indexMatkul;
+
+	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+	$url .= $_SERVER['SERVER_NAME'];
+	$url .= $_SERVER['REQUEST_URI'];
+
+	header("Location: " . dirname($url) . "/result.php");
+	die();
 
 ?>

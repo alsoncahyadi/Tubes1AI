@@ -10,6 +10,60 @@
 	$indexRuangan = $_SESSION["indexRuangan"];
 	$indexMatkul = $_SESSION["indexMatkul"];
 
+	//FUNGSI-FUNGSI YANG "MUNGKIN" DIBUTUHKAN
+
+	//fungsi pengecek kesalahan (kesalahan adalah mengalokasikan matkul di jadwal yang seharusnya tidak ada)
+	function cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul) {
+	    $test = 0;
+	    for ($i=0;$i<$jmlRuangan;$i++)
+	        for ($j=0;$j<$jmlMatkul+1;$j++)
+	            for ($k=0;$k<55;$k++)
+	                if (($arrayRuangan[$i][$j][$k][0]==0) and ($arrayRuangan[$i][$j][$k][1]==1))
+	                    $test++;
+	    return($test);
+	}
+
+	//echo cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul);
+
+	//fungsi kombinasi2 (untuk menghitung jumlah bentrok)
+	function kombinasi2($x) {
+	    if ($x==2)
+	        return 1;
+	    else return $x-1+kombinasi2($x-1);
+	}
+
+	//fungsi cek bentrok (jumlah bentrok di suatu ruangan)
+	function cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRuangan) {
+	    $idxRuangan = array_search($namaRuangan,$indexRuangan);
+	    $count = 0;
+	    for ($k=0;$k<55;$k++) {
+	        $count1 = 0;
+	        for ($j=0;$j<$jmlMatkul;$j++)
+	            $count1 += $arrayRuangan[$idxRuangan][$j][$k][1];
+	        if ($count1>1)
+	            $count += kombinasi2($count1);
+	    }
+	    return($count);
+	}
+
+	//fungsi cek All bentrok (jumlah bentrok di suatu ruangan)
+	function cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan) {
+	    
+	    $total = 0;
+	    for ($idxRuangan=0;$idxRuangan<$jmlRuangan;$idxRuangan++) {
+	        $count = 0;
+	        for ($k=0;$k<55;$k++) {
+	            $count1 = 0;
+	            for ($j=0;$j<$jmlMatkul;$j++)
+	                $count1 += $arrayRuangan[$idxRuangan][$j][$k][1];
+	            if ($count1>1)
+	                $count += kombinasi2($count1);
+	        }
+	        $total += $count;
+	    }
+	    return($total);
+	}
+
 	//Inisialisasi
 	$jmlHari = 5;
 	$jmlJam = 11;
@@ -79,6 +133,13 @@
 		}
 	}
 
+	$jmlRuangan = count($arrayRuangan);
+	$jmlMatkul = 0;
+	if ($jmlRuangan > 0) {
+		$jmlMatkul = count($arrayRuangan[0]) - 1;
+	}
+	$jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
+
 	?>
 	<div class="container" id="result">
 		<h1 class="resulttitle">Jadwal Mata Kuliah dan Ruangannya</h1>
@@ -104,12 +165,12 @@
 			</tr>
 			<?php } ?>
 		</table>
-		<br>
+		<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
 		<form action="modifyJadwal.php" method="post">
 			<h2>Change Matkul</h2>
 			Matkul yang ingin dipindah:&nbsp;
-			<input type="text" name="changeMatkul" id="changeMatkul"> <br>
-			Pindahkan ke:&nbsp;
+			<input type="text" name="changeMatkul" id="changeMatkul">
+			&nbsp;Pindahkan ke:&nbsp;
 			<input type="text" name="pindahKe" id="pindahKe"> <br>
 			<input type="submit">
 		</form>
