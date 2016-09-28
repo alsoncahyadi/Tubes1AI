@@ -67,6 +67,7 @@
 	//Inisialisasi
 	$jmlHari = 5;
 	$jmlJam = 11;
+	$jmlRuangan = count($arrayRuangan);
 	$arrayHari = array();
 	for($hari=0; $hari<$jmlHari; $hari++) {
 		array_push($arrayHari, array());
@@ -77,6 +78,7 @@
 			$arrayHari[$hari][$jam]["arrayIdxMatkul"] = array();
 			$arrayHari[$hari][$jam]["arrayRuangan"] = array();
 			$arrayHari[$hari][$jam]["arrayIdxRuangan"] = array();
+			//$arrayHari[$hari][$jam]["arrayRawHtmlPerRuangan"] = array();
 		}
 	}
 
@@ -87,7 +89,7 @@
 	 		   ["arrayIdxMatkul"] index matkulnya
 	 		   ["arrayRuangan"] nama ruangannya
 	 		   ["arrayIdxRuangan"] index ruangannya
-	 		   ["rawHtml"] html yang ditulis
+	 		   //["rawHtml"] html yang ditulis
 	**/
 
 	//Preprocess
@@ -126,11 +128,40 @@
 		foreach($hari as $idxJam => $jam) {
 			$arrayHari[$idxHari][$idxJam]["rawHtml"] = "";
 			foreach($jam["arrayMatkul"] as $idxArray => $matkul) {
-				$arrayHari[$idxHari][$idxJam]["rawHtml"] .= "<div class='data " . 
+				$rawHtml = "<div class='data " . 
 				$jam["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" . 
 				$jam["arrayIdxMatkul"][$idxArray] . "] </strong>" . $jam["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" . $jam["arrayRuangan"][$idxArray] . "</span></div>";
+				$arrayHari[$idxHari][$idxJam]["rawHtml"] .= $rawHtml;
 			}
 		}
+	}
+
+	function echoRawHtml($idxHari, $idxJam) {
+		global $arrayHari;
+		$rawHtml = "";
+		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
+			$rawHtml .= "<div class='data " . 
+			$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" .
+			$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "] </strong>" .
+			$arrayHari[$idxHari][$idxJam]["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" .
+			$arrayHari[$idxHari][$idxJam]["arrayRuangan"][$idxArray] . "</span></div>";
+		}
+		echo $rawHtml;
+	}
+
+	function echoRawHtmlPerRuangan($idxRuangan, $idxHari, $idxJam) {
+		global $arrayHari;
+		$rawHtml = "";
+		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
+			if ($arrayHari[$idxHari][$idxJam]["arrayIdxRuangan"][$idxArray] == $idxRuangan) {
+				$rawHtml .= "<div class=' " . 
+				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" .
+				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "] </strong>" .
+				$arrayHari[$idxHari][$idxJam]["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" .
+				$arrayHari[$idxHari][$idxJam]["arrayRuangan"][$idxArray] . "</span></div>";
+			}
+		}
+		echo $rawHtml;
 	}
 
 	$jmlRuangan = count($arrayRuangan);
@@ -142,38 +173,79 @@
 
 	?>
 	<div class="container" id="result">
-		<h1 class="resulttitle">Jadwal Mata Kuliah dan Ruangannya</h1>
-		<table class="tabledefault" style="width:100%">
-			<tr class="">
-				<th class="tableheading tabledefault">Jam \ Hari</th>
-				<th class="tableheading tabledefault">Senin</th>
-				<th class="tableheading tabledefault">Selasa</th>
-				<th class="tableheading tabledefault">Rabu</th>
-				<th class="tableheading tabledefault">Kamis</th>
-				<th class="tableheading tabledefault">Jumat</th>
-			</tr>
-			<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
-			<tr class="">
-				
-				<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
+		<!-- MASTER -->
+		<div class="container" id="master">
+			<h1 class="resulttitle">Jadwal Mata Kuliah dan Ruangannya</h1>
+			<?php
+			$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+			$url .= $_SERVER['SERVER_NAME'];
+			$url .= $_SERVER['REQUEST_URI'];
+			?>
+			<a href="<?php echo dirname($url) ?>"><h3 class="resulttitle">back to front page</h3></a>
+			<table class="tabledefault" style="width:100%">
+				<tr class="">
+					<th class="tableheading tabledefault">Jam \ Hari</th>
+					<th class="tableheading tabledefault">Senin</th>
+					<th class="tableheading tabledefault">Selasa</th>
+					<th class="tableheading tabledefault">Rabu</th>
+					<th class="tableheading tabledefault">Kamis</th>
+					<th class="tableheading tabledefault">Jumat</th>
+				</tr>
+				<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
+				<tr class="">
+					
+					<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
 
-				<td class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam ?>><?php echo $arrayHari[0][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam ?>><?php echo $arrayHari[1][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam ?>><?php echo $arrayHari[2][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault tableharijam" id= <?php echo "kamis" . $idxJam ?>><?php echo $arrayHari[3][$idxJam]["rawHtml"] ?></td>
-				<td class="tabledefault tableharijam" id= <?php echo "jumat" . $idxJam ?>><?php echo $arrayHari[4][$idxJam]["rawHtml"] ?></td>
-			</tr>
+					<td class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam ?>><?php echoRawHtml(0,$idxJam) ?></td>
+					<td class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam ?>><?php echoRawHtml(1,$idxJam) ?></td>
+					<td class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam ?>><?php echoRawHtml(2,$idxJam) ?></td>
+					<td class="tabledefault tableharijam" id= <?php echo "kamis" . $idxJam ?>><?php echoRawHtml(3,$idxJam) ?></td>
+					<td class="tabledefault tableharijam" id= <?php echo "jumat" . $idxJam ?>><?php echoRawHtml(4,$idxJam) ?></td>
+				</tr>
+				<?php } ?>
+			</table>
+			<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
+			<form action="modifyJadwal.php" method="post">
+				<h2>Change Matkul</h2>
+				Matkul yang ingin dipindah:&nbsp;
+				<input type="text" name="changeMatkul" id="changeMatkul">
+				&nbsp;Pindahkan ke:&nbsp;
+				<input type="text" name="pindahKe" id="pindahKe"> <br>
+				<input type="submit">
+			</form>
+		</div>
+
+		<!-- PER RUANGAN -->
+		<div class="container" id="perruangan">
+			<h1 class="resulttitle" style="padding-bottom: 3em;">Jadwal Matkul Per Ruangan</h1>
+			<?php foreach($arrayRuangan as $idxRuangan => $ruangan) { ?>
+				<div class='jadwalperruangan'>
+					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
+					<table class="tabledefault" style="width:100%">
+						<tr class="">
+							<th class="tableheading tabledefault">Jam \ Hari</th>
+							<th class="tableheading tabledefault">Senin</th>
+							<th class="tableheading tabledefault">Selasa</th>
+							<th class="tableheading tabledefault">Rabu</th>
+							<th class="tableheading tabledefault">Kamis</th>
+							<th class="tableheading tabledefault">Jumat</th>
+						</tr>
+						<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
+						<tr class="">
+							
+							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
+
+							<td class="tabledefault" id= <?php echo "senin" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam) ?></td>
+							<td class="tabledefault" id= <?php echo "selasa" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam) ?></td>
+							<td class="tabledefault" id= <?php echo "rabu" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam) ?></td>
+							<td class="tabledefault" id= <?php echo "kamis" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam) ?></td>
+							<td class="tabledefault" id= <?php echo "jumat" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam) ?></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
 			<?php } ?>
-		</table>
-		<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
-		<form action="modifyJadwal.php" method="post">
-			<h2>Change Matkul</h2>
-			Matkul yang ingin dipindah:&nbsp;
-			<input type="text" name="changeMatkul" id="changeMatkul">
-			&nbsp;Pindahkan ke:&nbsp;
-			<input type="text" name="pindahKe" id="pindahKe"> <br>
-			<input type="submit">
-		</form>
+		</div>
 	</div>
 </body>
 

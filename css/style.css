@@ -66,9 +66,25 @@ strong, span {
 	color: #4a86e8;
 }
 
+.jadwalperruangan {
+	margin: 2em;
+	padding: 2em;
+	border: 5px solid rgba(0,0,255,0.3);
+}
+
 #result {
 	width: 80%;
 	margin: auto;
+}
+
+#perruangan {
+	padding: 3em;
+	border: 5px solid red;
+	margin: 10em 0em 10em 0em;
+}
+
+#master {
+	margin: 1em 0em 5em 0em;
 }
 
 .data {
