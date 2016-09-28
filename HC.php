@@ -4,34 +4,7 @@ ini_set('max_execution_time', 0);
 include "readfile.php";
 include "library.php";
 
-//echo persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan);
-
-//oiya, sorry kalo banyak echo maupun print, masih di komentar soalnya buat debugging...
-
-echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7603",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7610",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"Labdas2",$indexRuangan) . "<br>";
-
-//echo persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan);
-
-//oiya, sorry kalo banyak echo maupun print, masih di komentar soalnya buat debugging...
-
-
-
-//Penjelasan cara ngakses Data
-//Seluruh Data ada di $arrayRuangan
-
-echo "<br>Ruangan ke-0, matkul ke-0, apakah ada di waktu ke-0 = " . $arrayRuangan[0][0][0][1] . "<br>"; //ini kalo tau indexnya
-echo "Ruangan 7602, hari ke-3, waktu 9.00, apakah ada IF2150? " . $arrayRuangan[array_search("7602",$indexRuangan)][array_search("IF2150",$indexMatkul)][getIndex(3,"9.00")][1] . "<br>";
-echo "Ruangan 7602, hari ke-3, waktu 9.00, apakah boleh diisi IF2150? " . $arrayRuangan[array_search("7602",$indexRuangan)][array_search("IF2150",$indexMatkul)][getIndex(3,"9.00")][0] . "<br>";
-echo "Ruangan Labdas2, hari ke-4, waktu 13.00, apakah ada IF3130? " . $arrayRuangan[array_search("Labdas2",$indexRuangan)][array_search("IF3130",$indexMatkul)][getIndex(4,"13.00")][1] . "<br>";
-echo "Ruangan Labdas2, hari ke-4, waktu 13.00, apakah boleh diisi IF3130? " . $arrayRuangan[array_search("Labdas2",$indexRuangan)][array_search("IF3130",$indexMatkul)][getIndex(4,"13.00")][0] . "<br>";
-
-echo "<br><br>.<br>.<br>.<br><br>";
-
-
-//fungsi-fungsi pendukung!!!
+//Fungsi-fungsi pendukung Hill Climbing!!
 
 //count matkul
 function countMatkul($arrayRuangan,$idxRuangan,$idxMatkul) {
@@ -204,35 +177,46 @@ function nextStep (&$arrayRuangan,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuan
 }
 
 
-//Hill Climbing
-//randomRestart
+//Hill Climbing Algorithm
+//Start (karena awalnya blom di tempat yang bener, di random)
 nextStep($arrayRuanganTemp,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
 
+//hitung jumlah bentrok
 $jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
+
+//init jumlah langkah
 $jmlLangkah = 0;
+
+//buat temporary untuk next step
 $arrayRuanganTemp = $arrayRuangan;
+
+//jumlah langkah/iterasi max (input dari user)
 $jmlLangkahMax = 1000;
 
+//looping
 while (($jmlLangkah < $jmlLangkahMax) and ($jmlBentrok!==0)) {
+    //nextStep
     nextStep($arrayRuanganTemp,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
+
+    //cek jumlah bentroknya
     $jmlBentrokTemp = cekAllBentrok($arrayRuanganTemp,$jmlRuangan,$jmlMatkul,$indexRuangan);
 
     if ($jmlBentrokTemp <= $jmlBentrok) {
+        //kalau lebih baik atau sama dengan dari sebelumnya, move
         $arrayRuangan = $arrayRuanganTemp;
         if($jmlBentrokTemp < $jmlBentrok)
+            //kalau lebih baik, iterasi mulai dari 0 lagi
             $jmlLangkah = 0;
+        //update jmlBentrok
         $jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
     }
 
+    //increment jmlh langkah
     $jmlLangkah++;
-    //echo "Jumlah bentrok = " . $jmlBentrok . " ; Iterasi ke-" . $jmlLangkah  . "<br>";
 }
 
 $jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 
-//echo "<br>Kesalahan : " . cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul) . "<br>";
-//echo "Bentrok : "  . $jmlBentrok . "<br>";
-//echo "Langkah : " . $jmlLangkah . "<br>";
 
 
 session_start();
@@ -241,23 +225,7 @@ $_SESSION["indexRuangan"] = $indexRuangan;
 $_SESSION["indexMatkul"] = $indexMatkul;
 $_SESSION["jmlBentrok"] = $jmlBentrok;
 
-/*
 
-$arrayRuangan
-    -> array of Matkul + 1 (+1 nya ga akan dipakai)
-        -> array of Time
-            -> 2 boolean [0] dan [1]
-               [0] gaboleh diubah (constraint)
-               [1] yang dipindah2in ()
-
-VARIABEL    => <Jam, Hari> di seluruh ruangan
-DOMAIN      => Matkul
-CONSTRAINT  => 
-    (BELUM LENGKAP) Membatasi waktu bisa diisi sama ruangan apa
-
-function getIndex($hari,$waktu)
-array_search($ruangan,$indexRuangan)
-*/
 $url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 $url .= $_SERVER['SERVER_NAME'];
 $url .= $_SERVER['REQUEST_URI'];

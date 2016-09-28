@@ -64,6 +64,23 @@
 	    return($total);
 	}
 
+
+	//fungsi menghitung persen ruangan yg terisi
+	function persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan) {
+		$terisi = 0;
+		$total = 0;
+		for ($i=0;$i<$jmlRuangan;$i++)
+		    for ($k=0;$k<55;$k++) {
+		         for ($j=0;$j<$jmlMatkul+1;$j++) {
+		            //hitung terisi
+		            $terisi += $arrayRuangan[$i][$j][$k][1];
+			    }
+		    	//hitung total
+		        $total += $arrayRuangan[$i][$jmlMatkul][$k][0];
+			}
+		return(($terisi*100 + 0.0)/$total);
+	}
+
 	//Inisialisasi
 	$jmlHari = 5;
 	$jmlJam = 11;
@@ -170,6 +187,7 @@
 		$jmlMatkul = count($arrayRuangan[0]) - 1;
 	}
 	$jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
+	$persenTerisi = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 
 	?>
 	<div class="container" id="result">
@@ -205,6 +223,7 @@
 				<?php } ?>
 			</table>
 			<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
+			<h3 class="jumlahbentrok">Persen Terisi: <?php echo $persenTerisi ?> %</h3>
 			<form action="modifyJadwal.php" method="post">
 				<h2>Change Matkul</h2>
 				Matkul yang ingin dipindah:&nbsp;
