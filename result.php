@@ -171,8 +171,8 @@
 		$rawHtml = "";
 		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
 			if ($arrayHari[$idxHari][$idxJam]["arrayIdxRuangan"][$idxArray] == $idxRuangan) {
-				$rawHtml .= "<div class=' " . 
-				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" .
+				$rawHtml .= "<div class='dataperruangan " . 
+				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "'><strong>( </strong><span class='matkul'>" . "<strong>[" .
 				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "] </strong>" .
 				$arrayHari[$idxHari][$idxJam]["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" .
 				$arrayHari[$idxHari][$idxJam]["arrayRuangan"][$idxArray] . "</span></div>";

@@ -69,7 +69,8 @@ strong, span {
 .jadwalperruangan {
 	margin: 2em;
 	padding: 2em;
-	border: 5px solid rgba(0,0,255,0.3);
+	/*border: 5px solid rgba(0,0,255,0.3);*/
+	background-color: rgba(255,255,255,1);
 }
 
 #result {
@@ -79,7 +80,8 @@ strong, span {
 
 #perruangan {
 	padding: 3em;
-	border: 5px solid red;
+	/*border: 5px solid red;*/
+	background-color: rgba(0,0,255,0.2);
 	margin: 10em 0em 10em 0em;
 }
 
@@ -98,6 +100,14 @@ strong, span {
 
 .data:hover {
 	font-weight: bolder;
+}
+
+.dataperruangan {
+	position: relative;
+	z-index: 100;
+	background-color: rgba(0, 0, 0, 0);
+	font-weight: normal;
+	border: 0px;
 }
 
 .resulttitle{
