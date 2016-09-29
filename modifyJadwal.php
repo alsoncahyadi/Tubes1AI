@@ -9,13 +9,9 @@ $indexMatkul = $_SESSION["indexMatkul"];
 $idxMatkul = $_POST["changeMatkul"];
 $harijam = $_POST["pindahKe"];
 
-//echo $idxMatkul;
 
 $count = 0;
-$arrayRuangan[0][0][1] = 0;
 $found = 0;
-
-//ALGO LU
 
 foreach ($arrayRuangan as $idxRuangan => $ruangan) {
 	foreach ($ruangan[$idxMatkul] as $idxJam => $jam) {
@@ -93,29 +89,40 @@ if (($harijam[0] == 's') && ($harijam[1] == 'e') && ($harijam[2] == 'n') &&
 //--------------------------------------------------------------------------------
 
 $currentjam = getTotalJam($harijam);
-$x = 0;	
-for ($x = 0; $x < $count ; $x++) {
-	$arrayRuangan
-	[$Ruangan]
-	[$idxMatkul]
-	[$currentjam]
-	[1] = true;
-	$currentjam = $currentjam +1 ;
+
+
+
+echo $currentjam , '    ', $count, '   ';
+
+if (($currentjam+$count) > 55) {
+	$_SESSION['JamFit'] = false;
+	echo $_SESSION['JamFit'];
+	echo "GA FIT";
+} elseif (($currentjam+$count) < 56) { 
+	$_SESSION['JamFit'] = true;
+	echo $_SESSION['JamFit'];
+	echo "BENER";
+	$x = 0;	
+	for ($x = 0; $x < $count ; $x++) {
+		$arrayRuangan
+		[$Ruangan]
+		[$idxMatkul]
+		[$currentjam]
+		[1] = true;
+		$currentjam = $currentjam +1 ;
+	}
+
+	//echo "jumlah matkul disitu :" , $count, "       ";
+	//echo "Jam :" , getTotalJam($harijam), "       ";
+	$_SESSION["arrayRuangan"] = $arrayRuangan;
+	$_SESSION["indexruangan"] = $indexRuangan;
+	$_SESSION["indexMatkul"] = $indexMatkul;
 }
+	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+	$url .= $_SERVER['SERVER_NAME'];
+	$url .= $_SERVER['REQUEST_URI'];
 
-//echo "jumlah matkul disitu :" , $count, "       ";
-//echo "Jam :" , getTotalJam($harijam), "       ";
-
-
-$_SESSION["arrayRuangan"] = $arrayRuangan;
-$_SESSION["indexruangan"] = $indexRuangan;
-$_SESSION["indexMatkul"] = $indexMatkul;
-
-$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
-$url .= $_SERVER['SERVER_NAME'];
-$url .= $_SERVER['REQUEST_URI'];
-
-header("Location: " . dirname($url) . "/result.php");
+	header("Location: " . dirname($url) . "/result.php");
 
 
 ?>

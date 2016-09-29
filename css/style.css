@@ -128,3 +128,11 @@ strong, span {
 .selectedharijam {
 	background-color: rgb(255,255,0) !important;
 }
+
+.changeinvalid {
+	margin: auto;
+	text-align: center;
+	background-color: #F66F52;
+	width : 20%;
+	padding: 1px 10px;
+}

@@ -6,6 +6,10 @@
 </head>
 <body>
 	<?php session_start();
+
+
+	
+
 	$arrayRuangan = $_SESSION["arrayRuangan"];
 	$indexRuangan = $_SESSION["indexRuangan"];
 	$indexMatkul = $_SESSION["indexMatkul"];
@@ -224,6 +228,23 @@
 			</table>
 			<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
 			<h3 class="jumlahbentrok">Persen Terisi: <?php echo $persenTerisi ?> %</h3>
+			
+
+			<?php if (isset($_SESSION['JamFit'])) {
+						$JamFit = $_SESSION['JamFit'];
+						if ($JamFit) { 
+			?>
+			<?php } else { 
+			?>	
+						<div class = "changeinvalid">
+						<p>Pemindahan sebelumnya tidak valid.</p>	
+						</div>
+			<?php
+						 }
+					} 
+			?>
+
+
 			<form action="modifyJadwal.php" method="post">
 				<h2>Change Matkul</h2>
 				Matkul yang ingin dipindah:&nbsp;
