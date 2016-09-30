@@ -13,6 +13,7 @@ $T = 500;
 $UR = sizeof($indexRuangan);
 $UM = sizeof($indexMatkul);
 $UW = sizeof($arrayRuangan[0][0]);
+$langkah = 700;//ubah ini, jadinya dari input
 
 function checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan){//total jumlah jam tempat yg nabrak
 	$jml=0;
@@ -150,10 +151,9 @@ function moveMatkul($UR,$UW,$tTempat, $tWaktu, $idxMatkul, $arrayMJ, $arrayRuang
 	return $arrayRuangan;
 }
 
-function SimAnneling($UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ){//Fungsi utama SA (tidak termasuk pembangkitan random di awal)
+function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ){//Fungsi utama SA (tidak termasuk pembangkitan random di awal)
 	$step = array();//posisi waktu target;
-
-	while ($T!=-200) 
+	while ($langkah!=0) 
 	{
 		$currMatkul = rand(0, $UM-1);
 		$arrayTarget = collectDomain($UR, $UW,$arrayRuangan, $currMatkul, $indexRuangan, $arrayTarget);//cari domain tempat&waktu
@@ -172,7 +172,8 @@ function SimAnneling($UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuanga
 		//unset array of domain
 		unset($arrayTarget);
 		$arrayTarget = array();
-		$T -= 1;
+		$T --;
+		$langkah--;
 	}
 	return $arrayRuangan;	
 }
@@ -186,7 +187,7 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 //Membangkitkan state atau solusi random
 $arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 //Simulated anneling
-$arrayRuangan = SimAnneling($UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
+$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 
 //passing
 session_start();
