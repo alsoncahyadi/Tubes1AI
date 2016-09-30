@@ -5,9 +5,58 @@
 	$pop = 2;
 ///
 
-	//FUNCTIONS
+///INISIALISASI ARRAY UNTUK POPULASI
+	$arrayPop = array();
+	for($h=0;$h<$pop;$h++)
+		for ($i=0;$i<$jmlRuangan;$i++)
+	    	for ($j=0;$j<$jmlMatkul+1;$j++)
+	        	for ($k=0;$k<55;$k++) {
+	            	$arrayPop[$h][$i][$j][$k][0] = 0; $arrayPop[$h][$i][$j][$k][1] = 0;
+	            	$arrayPop[$h][$i][$j][$k][2] = 0; $arrayPop[$h][$i][$j][$k][3] = 0;}
 
-	//ngambil constraint waktu ruangan
+	for($h=0;$h<$pop;$h++)
+		for ($i=0;$i<$jmlRuangan;$i++) {
+		    $waktu = $arrayFile[$i*4+1];
+		    $waktuAkhir = $arrayFile[$i*4+2];
+		    $durasi = $waktuAkhir-$waktu;
+		    //echo $durasi . "<br>";
+		    $listHari = $arrayFile[$i*4+3];
+		    $availableDays = strlen($listHari) / 2;
+		    for ($j=0;$j<$availableDays;$j++) {
+		        $hari = substr($listHari,$j*2,1);
+		        for ($k=0;$k<$durasi;$k++)
+		            $arrayPop[$h][$i][$jmlMatkul][getIndex($hari,$waktu)+$k][0] = 1;
+		    }
+		}
+
+	for($h=0;$h<$pop;$h++)
+		for ($i=0;$i<$jmlMatkul;$i++) {
+		    $ruangan = $arrayFile[$jmlRuangan*4+$i*6+1];
+		    $waktu = $arrayFile[$jmlRuangan*4+$i*6+2];
+		    $waktuAkhir = $arrayFile[$jmlRuangan*4+$i*6+3];
+		    $durasi = $waktuAkhir-$waktu;
+		    $listHari = $arrayFile[$jmlRuangan*4+$i*6+5];
+		    $availableDays = strlen($listHari) / 2;
+		    for ($j=0;$j<$availableDays;$j++) {
+		        $hari = substr($listHari,$j*2,1);
+		        if ($ruangan=="-") {
+		            for ($k=0;$k<$durasi;$k++)
+		                for ($l=0;$l<$jmlRuangan;$l++)
+		                    if ($arrayPop[$h][$l][$jmlMatkul][getIndex($hari,$waktu)+$k][0] == 1)
+		                        $arrayPop[$h][$l][$i][getIndex($hari,$waktu)+$k][0] = 1;
+		        } else {
+		            $idxRuang = array_search($ruangan,$indexRuangan);
+		            for ($k=0;$k<$durasi;$k++)
+		                if ($arrayPop[$h][$idxRuang][$jmlMatkul][getIndex($hari,$waktu)+$k][0] == 1)
+		                    $arrayPop[$h][$idxRuang][$i][getIndex($hari,$waktu)+$k][0] = 1;
+		        }
+		    }
+		}
+///
+
+///FUNCTIONS
+
+	//Mengambil constraint waktu kapan saja suatu ruangan dapat digunakan
 	$arrayTimeR = array();
 	function arrayTimeR($jmlRuangan, $arrayTimeR, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlRuangan; $i++){
@@ -23,7 +72,7 @@
 		return $arrayTimeR;
 	}
 
-	//ngambil constraint hari ruangan
+	//Mengambil constraint hari apa saja suatu ruangan dapat digunakan
 	$arrayHariR = array();
 	function arrayHariR($jmlRuangan, $arrayHariR, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlRuangan; $i++){
@@ -31,15 +80,28 @@
 		    $availableDays = strlen($listHari) / 2;
 		    for ($j=0;$j<$availableDays;$j++) {
 		        $hari = substr($listHari,$j*2,1);
-		        $arrayHari[$i][$j] = $hari;
+		        $arrayHariR[$i][$j] = $hari;
 		        //echo $hari . "<br>";
 		    }
 		}
 		return $arrayHariR;
 	}
-	//$arrayHariR = arrayHariR($jmlRuangan, $arrayHariR, $arrayRuangan, $arrayFile);
 
-	//ngambil constraint waktu matkul
+	//Mengambil constraint jumlah hari dimana suatu ruangan dapat digunakan
+	$jmlHariR = array();
+	function jmlHariR($jmlRuangan, $jmlHariR, $arrayRuangan, $arrayFile){
+		for($i=0; $i<$jmlRuangan; $i++){
+		    $listHari = $arrayFile[$i*4+3];
+		    $availableDays = strlen($listHari) / 2;
+		    for ($j=0;$j<$availableDays;$j++) {
+		        $jmlHariR[$i] = $j;
+		        //echo $jmlHariR . "<br>";
+		    }
+		}
+		return $jmlHariR;
+	}
+
+	//Mengambil constraint waktu kapan saja suatu mata kuliah dapat dijadwalkan
 	$arrayTimeM = array();
 	function arrayTimeM($jmlMatkul, $jmlRuangan, $arrayTimeM, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlMatkul; $i++){
@@ -57,7 +119,7 @@
 		return $arrayTimeM;
 	}
 
-	//ngambil constraint hari matkul
+	//Mengambil constraint hari apa saja suatu mata kuliah dapat dijadwalkan
 	$arrayHariM = array();
 	function arrayHariM($jmlRuangan, $jmlMatkul, $arrayHariM, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlMatkul; $i++){
@@ -73,15 +135,14 @@
 		return $arrayHariM;
 	}
 
-	//ngambil jumlah hari matkul
+	//Mengambil constraint jumlah hari dimana suatu mata kuliah dapat dijadwalkan
 	$jmlHariM = array();
 	function jmlHariM($jmlRuangan, $jmlMatkul, $jmlHariM, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlMatkul; $i++){
 		    $ruangan = $arrayFile[$jmlRuangan*4+$i*6+1];
 		    $listHari = $arrayFile[$jmlRuangan*4+$i*6+5];
 		    $availableDays = strlen($listHari) / 2;
-		    for ($j=0;$j<$availableDays;$j++) {
-		        $hari = substr($listHari,$j*2,1);
+		    for ($j=0;$j<$availableDays;$j++){
 		        $jmlHariM[$i] = $j;
 		    }
 		    //echo $jmlHariM[$i] . "<br>";
@@ -89,7 +150,7 @@
 		return $jmlHariM;
 	}
 
-	//ngambil constraint ruangan matkul
+	////Mengambil constraint ruangan dimana suatu mata kuliah dapat dijadwalkan
 	$arrayRuangM = array();
 	function arrayRuangM($jmlRuangan, $jmlMatkul, $arrayRuangM, $arrayRuangan, $arrayFile){
 		for($i=0; $i<$jmlMatkul; $i++){
@@ -104,19 +165,51 @@
 		return $arrayRuangM;
 	}
 
-	//randomisasi keseluruhan matkul
-	function randomizePop($pop, $jmlMatkul, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
+	//Menentukan constraint hari mana saja yang sama antara mata kuliah dan ruangan
+	function cekSama($j, $i, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR, $hariSama){
+		//echo "<br>";
+		$count = 0;
+		for($x=0; $x<$jmlHariM[$j]+1; $x++){
+			for($y=0; $y<$jmlHariR[$i]+1; $y++){
+				if($arrayHariM[$j][$x] == $arrayHariR[$i][$y]){
+					$hariSama[$count] = $arrayHariM[$j][$x];
+					//echo $hariSama[$count];
+					$count++;
+				}
+			}
+		}
+		return $hariSama;
+	}
+
+	//Menghitung jumlah constraint hari yang sama antara mata kuliah dan ruangan
+	function jmlSama($j, $i, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR){
+		echo "<br>";
+		$count = 0;
+		for($x=0; $x<$jmlHariM[$j]+1; $x++){
+			for($y=0; $y<$jmlHariR[$i]+1; $y++){
+				if($arrayHariM[$j][$x] == $arrayHariR[$i][$y]){
+					$count++;
+				}
+			}
+		}
+		//echo $count;
+		return $count;
+	}
+
+
+	//Fungsi untuk melakukan randomisasi jadwal terhadap seluruh mata kuliah
+	function randomizePop($pop, $jmlMatkul, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $jmlHariR, $arrayHariR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
 		for($j=0; $j<$jmlMatkul; $j++){
-			$arrayPop = randomizeMkul($pop, $j, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
+			$arrayPop = randomizeMkul($pop, $j, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $jmlHariR, $arrayHariR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
 		}
 		return $arrayPop;
 	}
 
-	//randomisasi salah satu matkul
-	function randomizeMkul($pop, $j, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
+	//Fungsi untuk melakukan randomisasi jadwal terhadap satu mata kuliah
+	function randomizeMkul($pop, $j, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $jmlHariR, $arrayHariR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
 		for($i=0; $i<$pop; $i++){
 			if($arrayRuangM[$j] == 0){
-				$room = rand(0,3);
+				$room = rand(0,$jmlRuangan-1);
 			}
 			else{
 				$room = array_search($arrayRuangM[$j],$indexRuangan);
@@ -142,78 +235,26 @@
 		return $arrayPop;
 	}
 
-	//nampilin array dari populasi
-	function tampil($cons, $pop, $jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayPop){
-		for($h = 0; $h < $pop; $h++){
+	//Menampilkan array hasil GA
+	function tampil($jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayRuangan){
 			echo "<h3>Population " . ($h+1) . "</h3>"; 
 			for($i = 0; $i < $jmlRuangan; $i++){
 				for($j = 0; $j < $jmlMatkul; $j++){
 					for($k = 0; $k < 55; $k++){
-						if($arrayPop[$h][$i][$j][$k][$cons])
+						if($arrayRuangan[$i][$j][$k][1])
 							echo "<br>>>> " . $indexRuangan[$i] . " " . $indexMatkul[$j] .  " Jam = " . ($k);
 					}
 				}
 				echo "<br>";
 			}
-		}
 		return;
 	}
-	
-	//inisialisasi array untuk populasi
-	$arrayPop = array();
-	for($h=0;$h<$pop;$h++)
-		for ($i=0;$i<$jmlRuangan;$i++)
-	    	for ($j=0;$j<$jmlMatkul+1;$j++)
-	        	for ($k=0;$k<55;$k++) {
-	            	$arrayPop[$h][$i][$j][$k][0] = 0; $arrayPop[$h][$i][$j][$k][1] = 0;
-	            	$arrayPop[$h][$i][$j][$k][2] = 0; $arrayPop[$h][$i][$j][$k][3] = 0;}
-
-	//masukkin constraint Ruangan
-	for($h=0;$h<$pop;$h++)
-		for ($i=0;$i<$jmlRuangan;$i++) {
-		    $waktu = $arrayFile[$i*4+1];
-		    $waktuAkhir = $arrayFile[$i*4+2];
-		    $durasi = $waktuAkhir-$waktu;
-		    //echo $durasi . "<br>";
-		    $listHari = $arrayFile[$i*4+3];
-		    $availableDays = strlen($listHari) / 2;
-		    for ($j=0;$j<$availableDays;$j++) {
-		        $hari = substr($listHari,$j*2,1);
-		        for ($k=0;$k<$durasi;$k++)
-		            $arrayPop[$h][$i][$jmlMatkul][getIndex($hari,$waktu)+$k][0] = 1;
-		    }
-		}
-
-	//masukkan slot yang dibolehin (boolean ke-0)
-	for($h=0;$h<$pop;$h++)
-		for ($i=0;$i<$jmlMatkul;$i++) {
-		    $ruangan = $arrayFile[$jmlRuangan*4+$i*6+1];
-		    $waktu = $arrayFile[$jmlRuangan*4+$i*6+2];
-		    $waktuAkhir = $arrayFile[$jmlRuangan*4+$i*6+3];
-		    $durasi = $waktuAkhir-$waktu;
-		    $listHari = $arrayFile[$jmlRuangan*4+$i*6+5];
-		    $availableDays = strlen($listHari) / 2;
-		    for ($j=0;$j<$availableDays;$j++) {
-		        $hari = substr($listHari,$j*2,1);
-		        if ($ruangan=="-") {
-		            for ($k=0;$k<$durasi;$k++)
-		                for ($l=0;$l<$jmlRuangan;$l++)
-		                    if ($arrayPop[$h][$l][$jmlMatkul][getIndex($hari,$waktu)+$k][0] == 1)
-		                        $arrayPop[$h][$l][$i][getIndex($hari,$waktu)+$k][0] = 1;
-		        } else {
-		            $idxRuang = array_search($ruangan,$indexRuangan);
-		            for ($k=0;$k<$durasi;$k++)
-		                if ($arrayPop[$h][$idxRuang][$jmlMatkul][getIndex($hari,$waktu)+$k][0] == 1)
-		                    $arrayPop[$h][$idxRuang][$i][getIndex($hari,$waktu)+$k][0] = 1;
-		        }
-		    }
-		}
 
 	$salahCount = array();
 	$bentrokCount = array();
-	//ngitung jumlah matkul yang salah dijadwalkan
+	//Menghitung jumlah mata kuliah yang salah penempatan jadwal
 	function countSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $salahCount){
-		echo"<br>";
+		//echo"<br>";
 		for($h = 0; $h < $pop; $h++){
 			$salahCount[$h] = 0;
 			for($i = 0; $i < $jmlRuangan; $i++){
@@ -224,14 +265,14 @@
 					}
 				}
 			}
-			echo $salahCount[$h] . " ";
+			//echo $salahCount[$h] . " ";
 		}
 		return $salahCount;
 	}
 
-	//ngitung jumlah matkul yang bentrok
+	//Menghitung jumlah mata kuliah yang bentrok
 	function countBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $bentrokCount){
-		echo"<br>";
+		//echo"<br>";
 		for($h = 0; $h < $pop; $h++){
 			$bentrokCount[$h] = 0;
 			for($i = 0; $i < $jmlRuangan; $i++){
@@ -244,12 +285,12 @@
             			$bentrokCount[$h] += kombinasi2($count);
 				}
 			}
-			echo $bentrokCount[$h] . " ";
+			//echo $bentrokCount[$h] . " ";
 		}
 		return $bentrokCount;
 	}
 
-	//ngitung persentase dari fitness function
+	//Menghitung persentase fitness function(fitness rate)
 	$fitnessRate = array();
 	function countFitness($pop, $fitnessRate, $salahCount, $bentrokCount){
 		//echo "<br>";
@@ -261,7 +302,7 @@
 		return $fitnessRate;
 	}
 
-	//ngurutin persentase secara descending
+	//Mengurutkan fitness rate secara descending
 	$fitnessSorted = array();
 	function sortFitness($pop, $fitnessRate, $fitnessSorted){
 		//echo"<br>";
@@ -280,7 +321,7 @@
 		return $fitnessSorted;
 	}
 
-	//ngambil index dari populasi mana dengan rate yang dah di sort
+	//Menentukan index dari masing2 fitness rate yang sudah diurutkan. index menunjukkan bahwa fitness rate urutan keberapa ialah milik populasi yang mana
 	$fitnessIndex = array();
 	function fitIndex($pop, $fitnessSorted, $fitnessRate, $fitnessIndex){
 		//echo"<br>";
@@ -295,7 +336,7 @@
 		return $fitnessIndex;
 	}
 
-	//selection
+	//Fungsi Selection
 	$arrayM = array();
 	function selection($pop, $fitnessIndex, $jmlMatkul, $jmlRuangan, $arrayPop, $arrayM){
 		//echo "<br>";
@@ -330,7 +371,7 @@
 		return $arrayPop;
 	}
 
-	//crossover
+	//Fungsi Cross-Over
 	function crossover($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $fitnessIndex){
 		for($i=0; $i<$pop; $i+=2){
 			$a = $fitnessIndex[$i];
@@ -356,9 +397,11 @@
 					for($l=0;$l<55;$l++){
 						if($arrayPop[$a][$j][$k][$l][3]){
 							$arrayPop[$a][$j][$k][$l][1] = 1;
+							$arrayPop[$a][$j][$k][$l][3] = 0;
 						}
 						if($arrayPop[$b][$j][$k][$l][2]){
 							$arrayPop[$b][$j][$k][$l][1] = 1;
+							$arrayPop[$b][$j][$k][$l][2] = 0;
 						}
 					}
 				}
@@ -367,7 +410,7 @@
 		return $arrayPop;
 	}
 
-	//ngecek matkul apa yang pertama kali dicek > bentrok pada suatu populasi
+	//Mencari mata kuliah yang bentrok, yang pertama ditemukan yang diambil
 	$firstBentrok = array();
 	function cekFirstBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstBentrok){
 		//echo"<br>";
@@ -393,7 +436,7 @@
 		return $firstBentrok;
 	}
 
-	//ngecek matkul apa yang pertama kali dicek > salah pada suatu populasi
+	//Mencari mata kuliah yang salah, yang pertama ditemukan yang diambil
 	$firstSalah = array();
 	function cekFirstSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstSalah){
 		//echo"<br>";
@@ -419,65 +462,85 @@
 		return $firstSalah;
 	}
 
-	//nge-assign matkul yang pertama kali salah, lalu dibenerin (belum selesai)
-	function assignBener($pop, $j, $arrayRuangM, $jmlRuangan, $jmlMatkul, $arrayFile, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
-		$firstBener = array();
-		echo"<br>";
+	//Fungsi Mutation
+	function mutation($pop, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR){
 		for($h=0; $h<$pop; $h++){
-			$count = 0;
-			for($i=0; $i<$jmlRuangan; $i++){
-				for($j=0; $j<$jmlMatkul; $j++){
-					$durasiKelas = $arrayFile[$jmlRuangan*4+$j*6+4];
-					for($k=0; $k<55; $k++){
-						if(!$arrayPop[$h][$i][$j][$k][0] && $arrayPop[$h][$i][$j][$k][1]){
-							if($arrayPop[$h][$i][$j][$k+1][0]/* && !$arrayPop[$h][$i][$j][$k+1][1]*/){
-								$firstBener[$h][0] = $j;
-								$firstBener[$h][1] = $k - $durasiKelas;
-								echo $firstBener[$h][0] . " ";
-								echo $firstBener[$h][1] . " ";
-							}
-						}
-					}
+			$hariSama = array();
+			if($firstSalah[$h][0] != -1 && $firstSalah[$h][1] != -1){
+				$i = $firstSalah[$h][0];
+				$j = $firstSalah[$h][1];
+				for($k=0; $k<55; $k++){
+					$arrayPop[$h][$i][$j][$k][1] = 0;
 				}
-			}
-		}
-		//for($h=0;; $h<$pop; $h++)
-	}
-
-	//mutation (masih salah)
-	function mutation($pop, $firstSalah, $firstBentrok, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop){
-		$count = 0;
-		for($h=0; $h<$pop; $h++){
-			if($firstSalah[$h][1] != -1){
-				$matkul[$count] = $firstSalah[$h][1];
-				$count++;
-			}else{
-				$matkul[$count] = -1;
-				$count++;
-			}
-		}
-		for($i=0; $i<$count; $i++){
-			if($matkul[$i] != -1){
-				$arrayPop = randomizeMkul($pop, $matkul[$i], $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
+				if($arrayTimeR[$i][1]<$arrayTimeM[$j][1])
+					$dur = $arrayTimeR[$i][1];
+				else
+					$dur = $arrayTimeM[$j][1];
+				if($arrayTimeR[$i][0]>$arrayTimeM[$j][0])
+					$st = $arrayTimeR[$i][0];
+				else
+					$st = $arrayTimeM[$j][0];
+				$hariSama = cekSama($j, $i, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR, $hariSama);
+				$jmlSama = jmlSama($j, $i, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR);
+				$a = rand(0, $jmlSama-1);
+				if($jmlSama == 0){
+					do{
+						if($arrayRuangM[$j] == 0){
+							$c = rand(0,$jmlRuangan-1);
+						}
+						else{
+							$c = array_search($arrayRuangM[$j],$indexRuangan);
+						}
+						$hariSama = cekSama($j, $c, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR, $hariSama);
+						$jmlSama = jmlSama($j, $c, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR);
+						$a = rand(0, $jmlSama-1);
+					}
+					while($c == $i);
+					$b = ($hariSama[$a]-1) * 11;
+				}
+				else{
+					$b = ($hariSama[$a]-1) * 11;
+					$c = $i;
+				}
+				$start = rand($st,($dur-$arrayTimeM[$j][3]));
+				//echo " st" . $start;
+				for($l=$start+$b;$l<$start+$arrayTimeM[$j][3]+$b;$l++){
+					$arrayPop[$h][$c][$j][$l][1] = 1;
+				}
 			}
 		}
 		return $arrayPop;
 	}
 
-	//tampil(2, $pop, $jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayPop);
-	//tampil(3, $pop, $jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayPop);
+	//Memasukkan nilai $arrayPop ke $arrayRuangan
+	function insert($jmlRuangan, $jmlMatkul, $arrayPop, $fitnessIndex, $arrayRuangan){
+		for($i=0; $i<$jmlRuangan; $i++){
+			for($j=0; $j<$jmlMatkul; $j++){
+				for($k=0; $k<55; $k++){
+					if($arrayPop[$fitnessIndex[0]][$i][$j][$k][1])
+						$arrayRuangan[$i][$j][$k][1] = 1;
+				}
+			}
+		}
+		return $arrayRuangan;
+	}
+///
 
-	//START THE GA!!!!
+//////START THE GA!!!!//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//Init
 	$arrayTimeR = arrayTimeR($jmlRuangan, $arrayTimeR, $arrayRuangan, $arrayFile);
 	$arrayTimeM = arrayTimeM($jmlMatkul, $jmlRuangan, $arrayTimeM, $arrayRuangan, $arrayFile);
 	$arrayHariM = arrayHariM($jmlRuangan, $jmlMatkul, $arrayHariM, $arrayRuangan, $arrayFile);
+	$arrayHariR = arrayHariR($jmlRuangan, $arrayHariR, $arrayRuangan, $arrayFile);
 	$jmlHariM = jmlHariM($jmlRuangan, $jmlMatkul, $jmlHariM, $arrayRuangan, $arrayFile);
+	$jmlHariR = jmlHariR($jmlRuangan, $jmlHariR, $arrayRuangan, $arrayFile);
 	$arrayRuangM = arrayRuangM($jmlRuangan, $jmlMatkul, $arrayRuangM, $arrayRuangan, $arrayFile);
-	$arrayPop = randomizePop($pop, $jmlMatkul, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
+	$arrayPop = randomizePop($pop, $jmlMatkul, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $jmlHariR, $arrayHariR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
 
-	//do{
+	$step=0;
+	do{
+
 		//Fitness
 		$salahCount = countSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $salahCount);
 		$bentrokCount = countBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $bentrokCount);
@@ -485,43 +548,38 @@
 		$fitnessSorted = sortFitness($pop, $fitnessRate, $fitnessSorted);
 		$fitnessIndex = fitIndex($pop, $fitnessSorted, $fitnessRate, $fitnessIndex);
 
-		//Tampil
-		tampil(1, $pop, $jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayPop);
-		for($h=0; $h<$pop; $h++){
-			echo $fitnessSorted[$h] . " ";
-		}
-
-		assignBener($pop, $j, $arrayRuangM, $jmlRuangan, $jmlMatkul, $arrayFile, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
-/*
 		//Select
 		$arrayPop = selection($pop, $fitnessIndex, $jmlMatkul, $jmlRuangan, $arrayPop, $arrayM);
-
+		
 		//Crossover
 		$arrayPop = crossover($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $fitnessIndex);
 	
 		//Mutate
 		$firstBentrok = cekFirstBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstBentrok);
 		$firstSalah = cekFirstSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstSalah);
-		$arrayPop = mutation($pop, $firstSalah, $firstBentrok, $jmlRuangan, $arrayRuangM, $indexRuangan, $arrayTimeR, $arrayTimeM, $arrayHariM, $jmlHariM, $arrayPop);
+		if($salahCount>0){
+			$arrayPop = mutation($pop, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
+		}else if($bentrokCount>0){
+			$arrayPop = mutation($pop, $firstBentrok, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
+		}
 
-		//$loop++;
-	//}*/
-	//while($loop<10);
-/*
-	//Fitness
-		$salahCount = countSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $salahCount);
-		$bentrokCount = countBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $bentrokCount);
-		$fitnessRate = countFitness($pop, $fitnessRate, $salahCount, $bentrokCount);
-		$fitnessSorted = sortFitness($pop, $fitnessRate, $fitnessSorted);
-		$fitnessIndex = fitIndex($pop, $fitnessSorted, $fitnessRate, $fitnessIndex);
-
-	//Tampil
-	tampil(1, $pop, $jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayPop);
-	for($h=0; $h<$pop; $h++){
-		echo $fitnessSorted[$h] . " ";
+		$step++;
+		if($step>=20)
+			break;
 	}
-	
-*/
+	while($salahCount[$fitnessSorted[0]]>0 && $bentrokCount[$fitnessSorted[0]]>0);
+
+	$arrayRuangan = insert($jmlRuangan, $jmlMatkul, $arrayPop, $fitnessIndex, $arrayRuangan);
+
+	session_start();
+	$_SESSION["arrayRuangan"] = $arrayRuangan;
+	$_SESSION["indexRuangan"] = $indexRuangan;
+	$_SESSION["indexMatkul"] = $indexMatkul;
+	$_SESSION["jmlBentrok"] = $jmlBentrok;
+
+	header("Location: /AI/result.php");
+	die();
+
 ///
 
 ?>
