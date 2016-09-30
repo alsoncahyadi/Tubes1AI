@@ -13,7 +13,7 @@ $T = 500;
 $UR = sizeof($indexRuangan);
 $UM = sizeof($indexMatkul);
 $UW = sizeof($arrayRuangan[0][0]);
-$langkah = 700;//ubah ini, jadinya dari input
+$langkah = $_POST["jumlahLangkah"];//ubah ini, jadinya dari input
 
 function checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan){//total jumlah jam tempat yg nabrak
 	$jml=0;
