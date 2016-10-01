@@ -225,11 +225,13 @@
 		} elseif ($idx == -1) {
 			echo "red";
 		} elseif ($idx == 1) {
-			echo "#ddb975";
+			echo "#f4a742";
 		} elseif ($idx == 2) {
-			echo "#dd7583";
+			echo "#42f4b0";
 		} elseif ($idx == 3) {
-			echo "#db78e8";
+			echo "#76a4f2";
+		} elseif ($idx == 4) {
+			echo "#f276ee";
 		}
 	}
 
@@ -272,7 +274,7 @@
 						$matkulInCell++;
 					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
 					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == false)){
-						if ($tabelwarna[0][$i-1] == 1) {
+						if ($tabelwarna[0][$i-1] = 1) {
 							$tabelwarna[0][$i] = 2;
 						} else {
 							$tabelwarna[0][$i] = 1;
@@ -280,14 +282,28 @@
 						$matkulInCell++;
 					}
 
+
+
+					// Kalau atasnya merah, langsung kasih 1.
 					if (($i > 0) && ($tabelwarna[0][$i-1] == -1) && ($arrayRuangan[0][$idxMatkul][$i][1] == true)) {
 						$tabelwarna[0][$i] = 1;	
+					}
+
+					// Kalau tabelwarna dengan index -11 sama, maka kembali ke index i terkecil dengan warna yang sama berturut-turu
+					if ($i>10) { 
+						if ($tabelwarna[0][$i]==$tabelwarna[0][$i-11]) {
+							while ($tabelwarna[0][$i]==$tabelwarna[0][$i-1]) {
+								$i = $i-1;
+							}
+							$tabelwarna[0][$i]++;
+						}
 					}
 				}
 			} 
 			// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
-
 			// Kalau matkulInCell lebih dari 1, dijadiin Merah.
+
+
 			if ($matkulInCell > 1) {
 				$tabelwarna[0][$i] = -1;
 			} 
