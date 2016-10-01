@@ -15,7 +15,6 @@
 	$indexMatkul = $_SESSION["indexMatkul"];
 
 	//FUNGSI-FUNGSI YANG "MUNGKIN" DIBUTUHKAN
-
 	//fungsi pengecek kesalahan (kesalahan adalah mengalokasikan matkul di jadwal yang seharusnya tidak ada)
 	function cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul) {
 	    $test = 0;
@@ -193,6 +192,111 @@
 	$jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 	$persenTerisi = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 
+
+//------------------------------------------------------------------------------------------------
+	function isCellBentrok($idxRuangan, $idxHari, $idxJam) {
+		global $arrayHari;
+		$count = 0;
+		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
+			$count++;
+		}
+		if ($count > 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	// Konstruksi
+	$tabelwarna = array();
+	for ($i = 0 ; $i < $jmlRuangan; $i++) {
+		array_push($tabelwarna,array());
+	}
+
+
+	//$tabelwarna[1][1] = 1;
+	//$tabelwarna[1][2] = 2;
+	//$tabelwarna[1][3] = 3;
+
+	function giveColor($idx) {
+		if ($idx == 0) {
+			echo "white";
+		} elseif ($idx == -1) {
+			echo "red";
+		} elseif ($idx == 1) {
+			echo "#ddb975";
+		} elseif ($idx == 2) {
+			echo "#dd7583";
+		} elseif ($idx == 3) {
+			echo "#db78e8";
+		}
+	}
+
+	function bgCell($idxRuangan, $idxHari, $idxJam) {
+		global $tabelwarna;
+		$jam = $idxHari*11 + $idxJam;
+		echo giveColor($tabelwarna[$idxRuangan][$jam]);
+	}
+
+	function tableColoring(){
+		global $tabelwarna;
+		global $arrayRuangan;
+		global $jmlRuangan;
+		global $jmlMatkul;
+		// Inisiasi
+		for ($i = 0; $i <$jmlRuangan ; $i++) {
+			for ($j = 0; $j <= 54 ; $j++) {
+				$tabelwarna[$i][$j] = 0;
+			}
+		}
+
+		for ($i=0 ; $i <= 54 ; $i++) {
+			$matkulInCell = 0;
+			for ($idxMatkul=0 ; $idxMatkul < $jmlMatkul; $idxMatkul++) {
+
+				if ($arrayRuangan[0][$idxMatkul][$i][1] == true) {
+					// Kalau di pertama ada matkul
+					if ($i==0) {
+						$tabelwarna[0][$i] = 1;
+						$matkulInCell++;
+					} // Kalau atasnya putih, dan ada matkul disitu
+
+					elseif (($i>0) && ($tabelwarna[0][$i-1] == 0) ) {
+						$tabelwarna[0][$i] = 1;
+						$matkulInCell++;
+					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya sama
+					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == true)){
+
+						$tabelwarna[0][$i] = $tabelwarna[0][$i-1];
+						$matkulInCell++;
+					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
+					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == false)){
+						if ($tabelwarna[0][$i-1] == 1) {
+							$tabelwarna[0][$i] = 2;
+						} else {
+							$tabelwarna[0][$i] = 1;
+						}
+						$matkulInCell++;
+					}
+
+					if (($i > 0) && ($tabelwarna[0][$i-1] == -1) && ($arrayRuangan[0][$idxMatkul][$i][1] == true)) {
+						$tabelwarna[0][$i] = 1;	
+					}
+				}
+			} 
+			// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
+
+			// Kalau matkulInCell lebih dari 1, dijadiin Merah.
+			if ($matkulInCell > 1) {
+				$tabelwarna[0][$i] = -1;
+			} 
+		}
+	}
+	tableColoring();
+
+
+//------------------------------------------------------------------------------------------------
 	?>
 	<div class="container" id="result">
 		<!-- MASTER -->
@@ -204,14 +308,14 @@
 			$url .= $_SERVER['REQUEST_URI'];
 			?>
 			<a href="<?php echo dirname($url) ?>"><h3 class="resulttitle">back to front page</h3></a>
-			<table class="tabledefault" style="width:100%">
+			<table class="tablealljadwal" style="width:100%">
 				<tr class="">
-					<th class="tableheading tabledefault">Jam \ Hari</th>
-					<th class="tableheading tabledefault">Senin</th>
-					<th class="tableheading tabledefault">Selasa</th>
-					<th class="tableheading tabledefault">Rabu</th>
-					<th class="tableheading tabledefault">Kamis</th>
-					<th class="tableheading tabledefault">Jumat</th>
+					<th class="tableheading">Jam \ Hari</th>
+					<th class="tableheading">Senin</th>
+					<th class="tableheading">Selasa</th>
+					<th class="tableheading">Rabu</th>
+					<th class="tableheading">Kamis</th>
+					<th class="tableheading">Jumat</th>
 				</tr>
 				<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
 				<tr class="">
@@ -261,27 +365,31 @@
 			<?php foreach($arrayRuangan as $idxRuangan => $ruangan) { ?>
 				<div class='jadwalperruangan'>
 					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
-					<table class="tabledefault" style="width:100%">
+					<table class="tableperroom" style="width:100%">
 						<tr class="">
-							<th class="tableheading tabledefault">Jam \ Hari</th>
-							<th class="tableheading tabledefault">Senin</th>
-							<th class="tableheading tabledefault">Selasa</th>
-							<th class="tableheading tabledefault">Rabu</th>
-							<th class="tableheading tabledefault">Kamis</th>
-							<th class="tableheading tabledefault">Jumat</th>
+							<th	class="tableheading">Jam \ Hari</th>
+							<th class="tableheading">Senin</th>
+							<th class="tableheading">Selasa</th>
+							<th class="tableheading">Rabu</th>
+							<th class="tableheading">Kamis</th>
+							<th class="tableheading">Jumat</th>
 						</tr>
-						<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
-						<tr class="">
-							
-							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
+						<?php 
 
-							<td class="tabledefault" id= <?php echo "senin" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam) ?></td>
-							<td class="tabledefault" id= <?php echo "selasa" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam) ?></td>
-							<td class="tabledefault" id= <?php echo "rabu" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam) ?></td>
-							<td class="tabledefault" id= <?php echo "kamis" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam) ?></td>
-							<td class="tabledefault" id= <?php echo "jumat" . $idxJam ?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam) ?></td>
+						for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
+						<tr class="">
+							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
+							<td style="background-color: <?php bgCell($idxRuangan,0,$idxJam)?>";
+							class="tabledefault" id= <?php echo "senin" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam); bgCell($idxRuangan,0,$idxJam)?></td>
+							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
+							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
+							<td class="tabledefault" id= <?php echo "rabu" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
+							<td class="tabledefault" id= <?php echo "kamis" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
+							<td class="tabledefault" id= <?php echo "jumat" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
 						</tr>
-						<?php } ?>
+						<?php 
+
+						} ?>
 					</table>
 				</div>
 			<?php } ?>
@@ -291,4 +399,5 @@
 
 	<script src="js/jquery-3.1.1.min.js" ></script>
 	<script type="text/javascript" src="js/script.js" ></script>
+
 </html>
