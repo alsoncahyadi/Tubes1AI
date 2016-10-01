@@ -206,7 +206,7 @@
 			<a href="<?php echo dirname($url) ?>"><h3 class="resulttitle">back to front page</h3></a>
 			<table class="tabledefault" style="width:100%">
 				<tr class="">
-					<th class="tableheading tabledefault">Jam \ Hari</th>
+					<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 					<th class="tableheading tabledefault">Senin</th>
 					<th class="tableheading tabledefault">Selasa</th>
 					<th class="tableheading tabledefault">Rabu</th>
@@ -263,7 +263,7 @@
 					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
 					<table class="tabledefault" style="width:100%">
 						<tr class="">
-							<th class="tableheading tabledefault">Jam \ Hari</th>
+							<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 							<th class="tableheading tabledefault">Senin</th>
 							<th class="tableheading tabledefault">Selasa</th>
 							<th class="tableheading tabledefault">Rabu</th>

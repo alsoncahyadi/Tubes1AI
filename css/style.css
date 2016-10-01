@@ -37,6 +37,14 @@ strong, span {
 	padding: 0.3em;
 }
 
+.tableheading {
+	background-color: rgba(0,200,200,0.5);
+}
+
+.tablejam {
+	background-color: rgba(210,0,150,0.4);
+}
+
 .tableharijam {
 	background-color: rgba(0,0,0,0);
 }
