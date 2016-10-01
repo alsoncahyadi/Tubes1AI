@@ -214,24 +214,19 @@
 		array_push($tabelwarna,array());
 	}
 
-
-	//$tabelwarna[1][1] = 1;
-	//$tabelwarna[1][2] = 2;
-	//$tabelwarna[1][3] = 3;
-
 	function giveColor($idx) {
 		if ($idx == 0) {
 			echo "white";
 		} elseif ($idx == -1) {
 			echo "red";
 		} elseif ($idx == 1) {
-			echo "#f4a742";
+			echo "#ffdb87";
 		} elseif ($idx == 2) {
-			echo "#42f4b0";
+			echo "#aec7ef";
 		} elseif ($idx == 3) {
-			echo "#76a4f2";
+			echo "#aeefb1";
 		} elseif ($idx == 4) {
-			echo "#f276ee";
+			echo "#edaeef";
 		}
 	}
 
@@ -262,32 +257,37 @@
 					if ($i==0) {
 						$tabelwarna[0][$i] = 1;
 						$matkulInCell++;
+						echo "IF1-", $i, " ";
 					} // Kalau atasnya putih, dan ada matkul disitu
 
 					elseif (($i>0) && ($tabelwarna[0][$i-1] == 0) ) {
 						$tabelwarna[0][$i] = 1;
 						$matkulInCell++;
+						echo "IF2-", $i, " ";						
 					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya sama
 					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == true)){
 
 						$tabelwarna[0][$i] = $tabelwarna[0][$i-1];
 						$matkulInCell++;
+						echo "IF3-", $i, " ";
 					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
 					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == false)){
-						if ($tabelwarna[0][$i-1] = 1) {
+						// Kalau atasnya 1, beri warna 2
+						if ($tabelwarna[0][$i-1] == 1) {
 							$tabelwarna[0][$i] = 2;
-						} else {
+							echo "IF4-", $i, " ";
+						} else { 
 							$tabelwarna[0][$i] = 1;
+							echo "IF5-", $i, " ";
 						}
 						$matkulInCell++;
 					}
 
-
-
 					// Kalau atasnya merah, langsung kasih 1.
 					if (($i > 0) && ($tabelwarna[0][$i-1] == -1) && ($arrayRuangan[0][$idxMatkul][$i][1] == true)) {
 						$tabelwarna[0][$i] = 1;	
-					}
+							echo "IFRED-", $i, " ";
+					}	
 
 					// Kalau tabelwarna dengan index -11 sama, maka kembali ke index i terkecil dengan warna yang sama berturut-turu
 					if ($i>10) { 
@@ -303,14 +303,12 @@
 			// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
 			// Kalau matkulInCell lebih dari 1, dijadiin Merah.
 
-
 			if ($matkulInCell > 1) {
 				$tabelwarna[0][$i] = -1;
 			} 
 		}
 	}
 	tableColoring();
-
 
 //------------------------------------------------------------------------------------------------
 	?>
@@ -399,9 +397,12 @@
 							class="tabledefault" id= <?php echo "senin" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam); bgCell($idxRuangan,0,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
 							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
-							<td class="tabledefault" id= <?php echo "rabu" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
-							<td class="tabledefault" id= <?php echo "kamis" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
-							<td class="tabledefault" id= <?php echo "jumat" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
+							<td style="background-color: <?php bgCell($idxRuangan,2,$idxJam)?>";
+							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
+							<td style="background-color: <?php bgCell($idxRuangan,3,$idxJam)?>";
+							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
+							<td style="background-color: <?php bgCell($idxRuangan,4,$idxJam)?>";
+							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
 						</tr>
 						<?php 
 
