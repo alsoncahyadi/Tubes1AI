@@ -10,13 +10,15 @@
 		<h1 class="frontpagetitle">AI FRONT PAGE</h1>
 		<div class="text-centered">
 			<p>Selesaikan testcase dengan algoritma:<p>
-			<form action="readfile.php" method="post">
-				<button type="submit" class="button" onclick="log()" name="SA">Simulated Annealing</button>
+			<form action="SA.php" method="post">
+				<button type="submit" class="button" onclick="log()" name="SA">Simulated Annealing</button><br>
+				Jumlah Langkah : <input type = "text" name="jumlahLangkah"> <br><br>
 			</form>
-			<form action="readfile.php" method="post">
-				<button type="submit" class="button" name="HC">Hill Climbing</button>
+			<form action="HC.php" method="post">
+				<button type="submit" class="button" name="HC">Hill Climbing</button><br>
+				Iterasi Maksimum : <input type = "text" name="iterMax"> <br><br>
 			</form>
-			<form action="readfile.php" method="post">
+			<form action="GA.php" method="post">
 				<button type="submit" class="button" name="GA">Genetics Algorithm</button>
 			</form>
 		</div>

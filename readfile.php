@@ -222,66 +222,6 @@ for ($i=0;$i<$jmlMatkul;$i++) {
 
 //Dah, dengan ini $arrayFile sudah tidak dibutuhkan. Selesaaai!!!!
 
-
-//FUNGSI-FUNGSI YANG "MUNGKIN" DIBUTUHKAN
-
-//fungsi pengecek kesalahan (kesalahan adalah mengalokasikan matkul di jadwal yang seharusnya tidak ada)
-function cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul) {
-    $test = 0;
-    for ($i=0;$i<$jmlRuangan;$i++)
-        for ($j=0;$j<$jmlMatkul+1;$j++)
-            for ($k=0;$k<55;$k++)
-                if (($arrayRuangan[$i][$j][$k][0]==0) and ($arrayRuangan[$i][$j][$k][1]==1))
-                    $test++;
-    return($test);
-}
-
-//echo cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul);
-
-//fungsi cek bentrok (jumlah bentrok di suatu ruangan)
-function cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRuangan) {
-    $idxRuangan = array_search($namaRuangan,$indexRuangan);
-    $count = 0;
-    for ($j=0;$j<$jmlMatkul+1;$j++) {
-        $count1 = 0;
-        for ($k=0;$k<55;$k++)
-            $count1 += $arrayRuangan[$idxRuangan][$j][$k][1];
-        if ($count1>1)
-            $count += $count1-1;
-    }
-    return($count);
-}
-
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7603",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"7610",$indexRuangan) . "<br>";
-//echo cekBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,"Labdas2",$indexRuangan) . "<br>";
-
-function persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$namaRuangan,$indexRuangan) {
-    $idxRuangan = array_search($namaRuangan,$indexRuangan);
-    $terisi = 0;
-    for ($j=0;$j<$jmlMatkul+1;$j++)
-        for ($k=0;$k<55;$k++)
-            $terisi += $arrayRuangan[$idxRuangan][$j][$k][1];
-    //echo $terisi . "<br>";
-
-    $total = 0;
-    for ($k=0;$k<55;$k++)
-        $total += $arrayRuangan[$idxRuangan][$jmlMatkul][$k][0];
-    //echo $total . "<br>";
-
-    return(($terisi + 0.0)/$total);
-}
-
-//echo persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,"7602",$indexRuangan);
-
-//oiya, sorry kalo banyak echo maupun print, masih di komentar soalnya buat debugging...
-
-session_start();
-$_SESSION["arrayRuangan"] = $arrayRuangan;
-$_SESSION["indexRuangan"] = $indexRuangan;
-$_SESSION["indexMatkul"] = $indexMatkul;
-
 /*
 
 $arrayRuangan
@@ -299,7 +239,4 @@ CONSTRAINT  =>
 function getIndex($hari,$waktu)
 array_search($ruangan,$indexRuangan)
 */
-
-header("Location: /aischeduling/result.php");
-die();
 ?>

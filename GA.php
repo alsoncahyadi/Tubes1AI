@@ -183,7 +183,7 @@
 
 	//Menghitung jumlah constraint hari yang sama antara mata kuliah dan ruangan
 	function jmlSama($j, $i, $jmlHariM, $arrayHariM, $jmlHariR, $arrayHariR){
-		echo "<br>";
+		//echo "<br>";
 		$count = 0;
 		for($x=0; $x<$jmlHariM[$j]+1; $x++){
 			for($y=0; $y<$jmlHariR[$i]+1; $y++){
@@ -237,7 +237,7 @@
 
 	//Menampilkan array hasil GA
 	function tampil($jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayRuangan){
-			echo "<h3>Population " . ($h+1) . "</h3>"; 
+			//echo "<h3>Population " . ($h+1) . "</h3>"; 
 			for($i = 0; $i < $jmlRuangan; $i++){
 				for($j = 0; $j < $jmlMatkul; $j++){
 					for($k = 0; $k < 55; $k++){
@@ -463,8 +463,8 @@
 	}
 
 	//Fungsi Mutation
-	function mutation($pop, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR){
-		for($h=0; $h<$pop; $h++){
+	function mutation($h, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR){
+		//for($h=0; $h<$pop; $h++){
 			$hariSama = array();
 			if($firstSalah[$h][0] != -1 && $firstSalah[$h][1] != -1){
 				$i = $firstSalah[$h][0];
@@ -508,7 +508,7 @@
 					$arrayPop[$h][$c][$j][$l][1] = 1;
 				}
 			}
-		}
+		//}
 		return $arrayPop;
 	}
 
@@ -557,27 +557,37 @@
 		//Mutate
 		$firstBentrok = cekFirstBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstBentrok);
 		$firstSalah = cekFirstSalah($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $firstSalah);
-		if($salahCount>0){
-			$arrayPop = mutation($pop, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
-		}else if($bentrokCount>0){
-			$arrayPop = mutation($pop, $firstBentrok, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
+		for($h=0; $h<$pop; $h++){
+			if($salahCount[$h]>0){
+				$arrayPop = mutation($h, $firstSalah, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
+			}else if($bentrokCount[$h]>0){
+				$arrayPop = mutation($h, $firstBentrok, $arrayPop, $arrayRuangM, $jmlRuangan, $jmlHariR, $jmlHariM, $arrayHariR, $arrayHariM, $arrayTimeM, $arrayTimeR);
+			}
 		}
 
 		$step++;
-		if($step>=20)
+		if($step>=100)
 			break;
 	}
 	while($salahCount[$fitnessSorted[0]]>0 && $bentrokCount[$fitnessSorted[0]]>0);
 
 	$arrayRuangan = insert($jmlRuangan, $jmlMatkul, $arrayPop, $fitnessIndex, $arrayRuangan);
+	tampil($jmlRuangan, $jmlMatkul, $indexRuangan, $indexMatkul, $arrayRuangan);
+
+	echo "Jumlah Salah = " . $salahCount[$fitnessSorted[0]] . "<br>";
+	echo "Jumlah Bentrok = " . $bentrokCount[$fitnessSorted[0]] . "<br>";
+
 
 	session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan;
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
-	$_SESSION["jmlBentrok"] = $jmlBentrok;
 
-	header("Location: /AI/result.php");
+	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+	$url .= $_SERVER['SERVER_NAME'];
+	$url .= $_SERVER['REQUEST_URI'];
+
+	header("Location: " . dirname($url) . "/result.php");
 	die();
 
 ///
