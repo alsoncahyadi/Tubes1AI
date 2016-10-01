@@ -308,7 +308,7 @@
 			$url .= $_SERVER['REQUEST_URI'];
 			?>
 			<a href="<?php echo dirname($url) ?>"><h3 class="resulttitle">back to front page</h3></a>
-			<table class="tablealljadwal" style="width:100%">
+			<table class="tabledefault" style="width:100%">
 				<tr class="">
 					<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 					<th class="tableheading tabledefault">Senin</th>
@@ -365,7 +365,7 @@
 			<?php foreach($arrayRuangan as $idxRuangan => $ruangan) { ?>
 				<div class='jadwalperruangan'>
 					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
-					<table class="tableperroom" style="width:100%">
+					<table class="tabledefault" style="width:100%">
 						<tr class="">
 							<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 							<th class="tableheading tabledefault">Senin</th>
