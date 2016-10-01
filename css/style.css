@@ -37,6 +37,12 @@ strong, span {
 	padding: 0.3em;
 }
 
+.tabledefault {
+	padding: 0.8em;
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
 .tableheading {
 	background-color: rgba(0,200,200,0.5);
 }
@@ -53,7 +59,19 @@ strong, span {
 	background-color: rgba(0,0,0,0.2);
 }
 
-.tabledefault {
+.tableheading {
+	padding: 0.8em;
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+.tableperroom {
+	padding: 0.8em;
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+.tablealljadwal {
 	padding: 0.8em;
 	border: 2px solid black;
 	border-collapse: collapse;
