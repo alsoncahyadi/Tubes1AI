@@ -191,7 +191,7 @@ $jmlLangkah = 0;
 $arrayRuanganTemp = $arrayRuangan;
 
 //jumlah langkah/iterasi max (input dari user)
-$jmlLangkahMax = 1000;
+$jmlLangkahMax = $_POST["iterMax"];
 
 //looping
 while (($jmlLangkah < $jmlLangkahMax) and ($jmlBentrok!==0)) {
