@@ -1,5 +1,6 @@
 <?php
 	include "readfile.php";
+	include "library.php";
 
 ///BANYAKNYA POPULASI YANG MAU DI GENERATE (HARUS GENAP)
 	$pop = 2;
@@ -52,6 +53,13 @@
 		        }
 		    }
 		}
+
+	//Mengosongkan isi array ruangan
+	for ($i=0;$i<$jmlMatkul;$i++) {
+	    $durasiKelas = $arrayFile[$jmlRuangan*4+$i*6+4];
+	    for ($k=0;$k<$durasiKelas;$k++)
+	            $arrayRuangan[0][$i][$k][1] = 0;
+	}
 ///
 
 ///FUNCTIONS
@@ -270,6 +278,11 @@
 		return $salahCount;
 	}
 
+	function kombinasi2($x) {
+    if ($x==2)
+	        return 1;
+	    else return $x-1+kombinasi2($x-1);
+	}
 	//Menghitung jumlah mata kuliah yang bentrok
 	function countBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $bentrokCount){
 		//echo"<br>";
@@ -566,7 +579,7 @@
 		}
 
 		$step++;
-		if($step>=100)
+		if($step>=1000)
 			break;
 	}
 	while($salahCount[$fitnessSorted[0]]>0 && $bentrokCount[$fitnessSorted[0]]>0);
