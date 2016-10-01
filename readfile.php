@@ -195,11 +195,13 @@ for ($i=0;$i<$jmlMatkul;$i++) {
         if ($ruangan=="-") {
             for ($k=0;$k<$durasi;$k++)
                 for ($l=0;$l<$jmlRuangan;$l++)
-                    $arrayRuangan[$l][$i][getIndex($hari,$waktu)+$k][0] = 1;
+                    if ($arrayRuangan[$l][$jmlMatkul][getIndex($hari,$waktu)+$k][0])
+                        $arrayRuangan[$l][$i][getIndex($hari,$waktu)+$k][0] = 1;
         } else {
             $idxRuang = array_search($ruangan,$indexRuangan);
             for ($k=0;$k<$durasi;$k++)
-                $arrayRuangan[$idxRuang][$i][getIndex($hari,$waktu)+$k][0] = 1;
+                if ($arrayRuangan[$idxRuang][$jmlMatkul][getIndex($hari,$waktu)+$k][0])
+                    $arrayRuangan[$idxRuang][$i][getIndex($hari,$waktu)+$k][0] = 1;
         }
     }
 }
