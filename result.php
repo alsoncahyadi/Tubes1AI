@@ -310,21 +310,12 @@
 			<a href="<?php echo dirname($url) ?>"><h3 class="resulttitle">back to front page</h3></a>
 			<table class="tablealljadwal" style="width:100%">
 				<tr class="">
-<<<<<<< HEAD
-					<th class="tableheading">Jam \ Hari</th>
-					<th class="tableheading">Senin</th>
-					<th class="tableheading">Selasa</th>
-					<th class="tableheading">Rabu</th>
-					<th class="tableheading">Kamis</th>
-					<th class="tableheading">Jumat</th>
-=======
 					<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 					<th class="tableheading tabledefault">Senin</th>
 					<th class="tableheading tabledefault">Selasa</th>
 					<th class="tableheading tabledefault">Rabu</th>
 					<th class="tableheading tabledefault">Kamis</th>
 					<th class="tableheading tabledefault">Jumat</th>
->>>>>>> origin/master
 				</tr>
 				<?php for($idxJam = 0; $idxJam < 11; $idxJam++) {?>
 				<tr class="">
@@ -376,21 +367,12 @@
 					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
 					<table class="tableperroom" style="width:100%">
 						<tr class="">
-<<<<<<< HEAD
-							<th	class="tableheading">Jam \ Hari</th>
-							<th class="tableheading">Senin</th>
-							<th class="tableheading">Selasa</th>
-							<th class="tableheading">Rabu</th>
-							<th class="tableheading">Kamis</th>
-							<th class="tableheading">Jumat</th>
-=======
 							<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 							<th class="tableheading tabledefault">Senin</th>
 							<th class="tableheading tabledefault">Selasa</th>
 							<th class="tableheading tabledefault">Rabu</th>
 							<th class="tableheading tabledefault">Kamis</th>
 							<th class="tableheading tabledefault">Jumat</th>
->>>>>>> origin/master
 						</tr>
 						<?php 
 
