@@ -53,19 +53,7 @@ strong, span {
 	background-color: rgba(0,0,0,0.2);
 }
 
-.tableheading {
-	padding: 0.8em;
-	border: 2px solid black;
-	border-collapse: collapse;
-}
-
-.tableperroom {
-	padding: 0.8em;
-	border: 2px solid black;
-	border-collapse: collapse;
-}
-
-.tablealljadwal {
+.tabledefault {
 	padding: 0.8em;
 	border: 2px solid black;
 	border-collapse: collapse;
@@ -155,17 +143,4 @@ strong, span {
 	background-color: #F66F52;
 	width : 20%;
 	padding: 1px 10px;
-}
-
-.tabledefault {
-	padding: 0.8em;
-	border: 2px solid black;
-	border-collapse: collapse;
-}
-
-.tablecolour1 {
-	padding: 0.8em;
-	border: 2px solid black;
-	border-collapse: collapse;
-	background-color: #9bbef7;	
 }
