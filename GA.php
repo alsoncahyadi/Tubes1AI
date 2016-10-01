@@ -278,11 +278,6 @@
 		return $salahCount;
 	}
 
-	function kombinasi2($x) {
-    if ($x==2)
-	        return 1;
-	    else return $x-1+kombinasi2($x-1);
-	}
 	//Menghitung jumlah mata kuliah yang bentrok
 	function countBentrok($pop, $jmlRuangan, $jmlMatkul, $arrayPop, $bentrokCount){
 		//echo"<br>";
