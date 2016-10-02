@@ -450,15 +450,13 @@
 						}
 					}
 				}
-				if($choice){
-					if($hari < $hariSama[$jmlSama-1]-1){
-						$jamAwal += ($hariSama[$idxHari] - $hari) * 11;
-						$jamAkhir += ($hariSama[$idxHari] - $hari) * 11;
-					}
-					else{
-						$jamAwal -= (($hariSama[$idxHari] - $hari) * 11);
-						$jamAkhir -= (($hariSama[$idxHari] - $hari) * 11);
-					}
+				if($hari < $hariSama[$jmlSama-1]-1){
+					$jamAwal += ($hariSama[$idxHari] - $hari) * 11;
+					$jamAkhir += ($hariSama[$idxHari] - $hari) * 11;
+				}
+				else{
+					$jamAwal -= (($hariSama[$idxHari] - $hari) * 11);
+					$jamAkhir -= (($hariSama[$idxHari] - $hari) * 11);
 				}
 			}
 			else{
