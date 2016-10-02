@@ -10,16 +10,17 @@
 		<h1 class="frontpagetitle">AI FRONT PAGE</h1>
 		<div class="text-centered">
 			<p>Selesaikan testcase dengan algoritma:<p>
-			<form action="SA.php" method="post">
+			<form class="ai-form" action="SA.php" method="post">
 				<button type="submit" class="button" onclick="log()" name="SA">Simulated Annealing</button><br>
-				Jumlah Langkah : <input type = "text" name="jumlahLangkah" value="700"> <br><br>
+				Jumlah Langkah : <input class="number" type = "number" name="jumlahLangkah" value="700">
 			</form>
-			<form action="HC.php" method="post">
+			<form class="ai-form" action="HC.php" method="post">
 				<button type="submit" class="button" name="HC">Hill Climbing</button><br>
-				Iterasi Maksimum : <input type = "text" name="iterMax" value="1000"> <br><br>
+				Iterasi Maksimum : <input class="number" type = "number" name="iterMax" value="1000">
 			</form>
-			<form action="GA.php" method="post">
-				<button type="submit" class="button" name="GA">Genetics Algorithm</button>
+			<form class="ai-form" action="GA.php" method="post">
+				<button type="submit" class="button" name="GA">Genetics Algorithm</button><br>
+				Iterasi Maksimum : <input class="number" type = "number" name="maxStep" value="1000">
 			</form>
 		</div>
 	</div>
