@@ -214,19 +214,24 @@
 		array_push($tabelwarna,array());
 	}
 
+
+	//$tabelwarna[1][1] = 1;
+	//$tabelwarna[1][2] = 2;
+	//$tabelwarna[1][3] = 3;
+
 	function giveColor($idx) {
 		if ($idx == 0) {
 			echo "white";
 		} elseif ($idx == -1) {
 			echo "red";
 		} elseif ($idx == 1) {
-			echo "#ffdb87";
+			echo "#8df48b";
 		} elseif ($idx == 2) {
-			echo "#aec7ef";
+			echo "#f4f38b";
 		} elseif ($idx == 3) {
-			echo "#aeefb1";
+			echo "#a7c6e5";
 		} elseif ($idx == 4) {
-			echo "#edaeef";
+			echo "#dea7e5";
 		}
 	}
 
@@ -272,11 +277,10 @@
 						echo "IF3-", $i, " ";
 					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
 					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == false)){
-						// Kalau atasnya 1, beri warna 2
 						if ($tabelwarna[0][$i-1] == 1) {
 							$tabelwarna[0][$i] = 2;
 							echo "IF4-", $i, " ";
-						} else { 
+						} else {
 							$tabelwarna[0][$i] = 1;
 							echo "IF5-", $i, " ";
 						}
@@ -286,7 +290,6 @@
 					// Kalau atasnya merah, langsung kasih 1.
 					if (($i > 0) && ($tabelwarna[0][$i-1] == -1) && ($arrayRuangan[0][$idxMatkul][$i][1] == true)) {
 						$tabelwarna[0][$i] = 1;	
-							echo "IFRED-", $i, " ";
 					}	
 
 					// Kalau tabelwarna dengan index -11 sama, maka kembali ke index i terkecil dengan warna yang sama berturut-turu
@@ -294,8 +297,15 @@
 						if ($tabelwarna[0][$i]==$tabelwarna[0][$i-11]) {
 							while ($tabelwarna[0][$i]==$tabelwarna[0][$i-1]) {
 								$i = $i-1;
+								echo "BACK ";
 							}
 							$tabelwarna[0][$i]++;
+							while (($tabelwarna[0][$i]==$tabelwarna[0][$i-1]) || ($tabelwarna[0][$i] == $tabelwarna[0][$i-11])) {
+								
+								$tabelwarna[0][$i]++;							
+								echo "CHANGE TO DIFF WITH PREV ";
+							}
+
 						}
 					}
 				}
@@ -303,12 +313,14 @@
 			// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
 			// Kalau matkulInCell lebih dari 1, dijadiin Merah.
 
+
 			if ($matkulInCell > 1) {
 				$tabelwarna[0][$i] = -1;
 			} 
 		}
 	}
 	tableColoring();
+
 
 //------------------------------------------------------------------------------------------------
 	?>
@@ -394,7 +406,7 @@
 						<tr class="">
 							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
 							<td style="background-color: <?php bgCell($idxRuangan,0,$idxJam)?>";
-							class="tabledefault" id= <?php echo "senin" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam); bgCell($idxRuangan,0,$idxJam)?></td>
+							class="tabledefault" id= <?php echo "senin" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
 							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,2,$idxJam)?>";
