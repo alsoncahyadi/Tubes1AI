@@ -405,14 +405,6 @@
 
 						} ?>
 					</table>
-				<form action="modifyJadwal.php" method="post">
-					<h2>Change Matkul</h2>
-					Matkul yang ingin dipindah:&nbsp;
-					<input type="text" name="changeMatkul" id="changeMatkul">
-					&nbsp;Pindahkan ke:&nbsp;
-					<input type="text" name="pindahKe" id="pindahKe"> <br>
-					<input type="submit">
-				</form>
 				</div>
 			<?php } ?>
 		</div>
