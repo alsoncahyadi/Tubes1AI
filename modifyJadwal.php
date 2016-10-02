@@ -41,10 +41,10 @@ function getJam($harijam, $letakjam) {
 		$currentjam = 0;
 	} elseif ($harijam[$letakjam]==1) {
 		$currentjam = 1;
-		if ($harijam[$letakjam+1] != NULL) {
-			if($harijam[$letakjam+1]==1) {
+		if (isset($harijam[$letakjam+1])) {
+			if ($harijam[$letakjam+1]=='0') {
 				$currentjam = 10;			
-			} else if ($harijam[$letakjam+1] == '-') {
+			} elseif ($harijam[$letakjam+1] == '-') {
 				echo "PINDAH RUANG";
 			}
 		}
