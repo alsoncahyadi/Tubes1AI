@@ -225,11 +225,11 @@
 		} elseif ($idx == -1) {
 			echo "red";
 		} elseif ($idx == 1) {
-			echo "#8df48b";
-		} elseif ($idx == 2) {
-			echo "#f4f38b";
-		} elseif ($idx == 3) {
 			echo "#a7c6e5";
+		} elseif ($idx == 2) {
+			echo "#8df48b";
+		} elseif ($idx == 3) {
+			echo "#f4f38b";
 		} elseif ($idx == 4) {
 			echo "#dea7e5";
 		}
@@ -252,75 +252,73 @@
 				$tabelwarna[$i][$j] = 0;
 			}
 		}
+		for ($rgn = 0; $rgn < $jmlRuangan ; $rgn++) {
+			for ($i=0 ; $i <= 54 ; $i++) {
+				$matkulInCell = 0;
+				for ($idxMatkul=0 ; $idxMatkul < $jmlMatkul; $idxMatkul++) {
 
-		for ($i=0 ; $i <= 54 ; $i++) {
-			$matkulInCell = 0;
-			for ($idxMatkul=0 ; $idxMatkul < $jmlMatkul; $idxMatkul++) {
+					if ($arrayRuangan[$rgn][$idxMatkul][$i][1] == true) {
+						// Kalau di pertama ada matkul
+						if ($i==0) {
+							$tabelwarna[$rgn][$i] = 1;
+							$matkulInCell++;
+							echo "IF1-", $i, " ";
+						} // Kalau atasnya putih, dan ada matkul disitu
 
-				if ($arrayRuangan[0][$idxMatkul][$i][1] == true) {
-					// Kalau di pertama ada matkul
-					if ($i==0) {
-						$tabelwarna[0][$i] = 1;
-						$matkulInCell++;
-						echo "IF1-", $i, " ";
-					} // Kalau atasnya putih, dan ada matkul disitu
+							$tabelwarna[$rgn][$i] = 1;
+							$matkulInCell++;
+							echo "IF2-", $i, " ";						
+						} // Kalau atasnya bukan putih, ada matkul, dan matkulnya sama
+						elseif (($i>0) && ($tabelwarna[$rgn][$i-1] != 0) && ($arrayRuangan[$rgn][$idxMatkul][$i-1][1] == true)){
 
-					elseif (($i>0) && ($tabelwarna[0][$i-1] == 0) ) {
-						$tabelwarna[0][$i] = 1;
-						$matkulInCell++;
-						echo "IF2-", $i, " ";						
-					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya sama
-					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == true)){
-
-						$tabelwarna[0][$i] = $tabelwarna[0][$i-1];
-						$matkulInCell++;
-						echo "IF3-", $i, " ";
-					} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
-					elseif (($i>0) && ($tabelwarna[0][$i-1] != 0) && ($arrayRuangan[0][$idxMatkul][$i-1][1] == false)){
-						if ($tabelwarna[0][$i-1] == 1) {
-							$tabelwarna[0][$i] = 2;
-							echo "IF4-", $i, " ";
-						} else {
-							$tabelwarna[0][$i] = 1;
-							echo "IF5-", $i, " ";
-						}
-						$matkulInCell++;
-					}
-
-					// Kalau atasnya merah, langsung kasih 1.
-					if (($i > 0) && ($tabelwarna[0][$i-1] == -1) && ($arrayRuangan[0][$idxMatkul][$i][1] == true)) {
-						$tabelwarna[0][$i] = 1;	
-					}	
-
-					// Kalau tabelwarna dengan index -11 sama, maka kembali ke index i terkecil dengan warna yang sama berturut-turu
-					if ($i>10) { 
-						if ($tabelwarna[0][$i]==$tabelwarna[0][$i-11]) {
-							while ($tabelwarna[0][$i]==$tabelwarna[0][$i-1]) {
-								$i = $i-1;
-								echo "BACK ";
+							$tabelwarna[$rgn][$i] = $tabelwarna[$rgn][$i-1];
+							$matkulInCell++;
+							echo "IF3-", $i, " ";
+						} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
+						elseif (($i>0) && ($tabelwarna[$rgn][$i-1] != 0) && ($arrayRuangan[$rgn][$idxMatkul][$i-1][1] == false)){
+							if ($tabelwarna[$rgn][$i-1] == 1) {
+								$tabelwarna[$rgn][$i] = 2;
+								echo "IF4-", $i, " ";
+							} else {
+								$tabelwarna[$rgn][$i] = 1;
+								echo "IF5-", $i, " ";
 							}
-							$tabelwarna[0][$i]++;
-							while (($tabelwarna[0][$i]==$tabelwarna[0][$i-1]) || ($tabelwarna[0][$i] == $tabelwarna[0][$i-11])) {
-								
-								$tabelwarna[0][$i]++;							
-								echo "CHANGE TO DIFF WITH PREV ";
-							}
+							$matkulInCell++;
+						}
 
+						// Kalau atasnya merah, langsung kasih 1.
+						if (($i > 0) && ($tabelwarna[$rgn][$i-1] == -1) && ($arrayRuangan[$rgn][$idxMatkul][$i][1] == true)) {
+							$tabelwarna[$rgn][$i] = 1;	
+						}	
+
+						// Kalau tabelwarna dengan index -11 sama, maka kembali ke index i terkecil dengan warna yang sama berturut-turu
+						if ($i>10) { 
+							if ($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-11]) {
+								while ($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-1]) {
+									$i = $i-1;
+									echo "BACK ";
+								}
+								$tabelwarna[$rgn][$i]++;
+								while (($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-1]) || ($tabelwarna[$rgn][$i] == $tabelwarna[$rgn][$i-11])) {
+									
+									$tabelwarna[$rgn][$i]++;							
+									echo "CHANGE TO DIFF WITH PREV ";
+								}
+
+							}
 						}
 					}
-				}
-			} 
-			// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
-			// Kalau matkulInCell lebih dari 1, dijadiin Merah.
-
-
-			if ($matkulInCell > 1) {
-				$tabelwarna[0][$i] = -1;
-			} 
+				} 
+				// Kalau i-1 nya sama dengan current i, berarti tabelwarna++, kecuali index matkulnya sama.
+				// Kalau matkulInCell lebih dari 1, dijadiin Merah.
+				if ($matkulInCell > 1) {
+					$tabelwarna[$rgn][$i] = -1;
+				} 
+			}
 		}
 	}
-	tableColoring();
 
+	tableColoring();
 
 //------------------------------------------------------------------------------------------------
 	?>
