@@ -23,6 +23,15 @@ foreach ($arrayRuangan as $idxRuangan => $ruangan) {
 		}
 	}
 
+if (strpos($harijam, '-')==true) {
+	$Ruangan = $harijam[strpos($harijam,'-')+1];
+}
+
+
+
+
+
+
 // PARSER FUNCTION ----------------------------------------------------------
 function getJam($harijam, $letakjam) {
 /*
@@ -32,9 +41,11 @@ function getJam($harijam, $letakjam) {
 		$currentjam = 0;
 	} elseif ($harijam[$letakjam]==1) {
 		$currentjam = 1;
-		if (strlen($harijam) == $letakjam+2) {
-			if($harijam[$letakjam+1]==0) {
-				$currentjam = 	10;			
+		if ($harijam[$letakjam+1] != NULL) {
+			if($harijam[$letakjam+1]==1) {
+				$currentjam = 10;			
+			} else if ($harijam[$letakjam+1] == '-') {
+				echo "PINDAH RUANG";
 			}
 		}
 	} elseif ($harijam[$letakjam]==2) {
@@ -89,19 +100,14 @@ if (($harijam[0] == 's') && ($harijam[1] == 'e') && ($harijam[2] == 'n') &&
 //--------------------------------------------------------------------------------
 
 $currentjam = getTotalJam($harijam);
+//echo $currentjam , '    ', $count, '   ';
 
 
-
-echo $currentjam , '    ', $count, '   ';
-
+// Pengecekan apakah pemindahan valid atau tidak ---------------------------------
 if (($currentjam+$count) > 55) {
 	$_SESSION['JamFit'] = false;
-	echo $_SESSION['JamFit'];
-	echo "GA FIT";
 } elseif (($currentjam+$count) < 56) { 
 	$_SESSION['JamFit'] = true;
-	echo $_SESSION['JamFit'];
-	echo "BENER";
 	$x = 0;	
 	for ($x = 0; $x < $count ; $x++) {
 		$arrayRuangan
@@ -111,9 +117,9 @@ if (($currentjam+$count) > 55) {
 		[1] = true;
 		$currentjam = $currentjam +1 ;
 	}
+//--------------------------------------------------------------------------------
 
-	//echo "jumlah matkul disitu :" , $count, "       ";
-	//echo "Jam :" , getTotalJam($harijam), "       ";
+
 	$_SESSION["arrayRuangan"] = $arrayRuangan;
 	$_SESSION["indexruangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
@@ -123,6 +129,4 @@ if (($currentjam+$count) > 55) {
 	$url .= $_SERVER['REQUEST_URI'];
 
 	header("Location: " . dirname($url) . "/result.php");
-
-
 ?>

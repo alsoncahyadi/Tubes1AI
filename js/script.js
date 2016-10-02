@@ -19,6 +19,47 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+	//kalo class data diklik...
+    $(".dataperruangan").click(function(event){
+    	var matkulId = $(event.target).attr('class').replace('data ','');
+    	matkulId = matkulId.replace(' selecteddata','');
+    	var initialColorName = "rgba(0, 0, 0, 0)";
+    	var changeColorName = "rgb(0, 255, 0)";
+    	//Semua class matkulId diubah warnanya jadi ijo
+		$("." + matkulId).each(function() {
+			if ($(this).attr("class").indexOf("selecteddata") == -1) {
+				$('input[name=changeMatkul]').val(matkulId);
+				$(this).addClass('selecteddata');
+			} else { //Kalo udah ijo, diputihin
+				$('input[name=changeMatkul]').val("");
+				$(this).removeClass('selecteddata');
+			}
+		});
+    });
+});
+
+$(document).ready(function(){
+	//kalo class data diklik...
+    $(".tabledefault").click(function(event){
+    	var matkulId = $(event.target).attr('class').replace('data ','');
+    	matkulId = matkulId.replace(' selecteddata','');
+    	var initialColorName = "rgba(0, 0, 0, 0)";
+    	var changeColorName = "rgb(0, 255, 0)";
+    	//Semua class matkulId diubah warnanya jadi ijo
+		$("." + matkulId).each(function() {
+			if ($(this).attr("class").indexOf("selecteddata") == -1) {
+				$('input[name=changeMatkul]').val(matkulId);
+				$(this).addClass('selecteddata');
+			} else { //Kalo udah ijo, diputihin
+				$('input[name=changeMatkul]').val("");
+				$(this).removeClass('selecteddata');
+			}
+		});
+    });
+});
+
+
+$(document).ready(function(){
 	//kalo class tableharijam diklik...
     $(".tableharijam").click(function(event){
     	var initialColorName = "rgba(0, 0, 0, 0)";

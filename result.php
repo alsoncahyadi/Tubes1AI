@@ -6,10 +6,6 @@
 </head>
 <body>
 	<?php session_start();
-
-
-	
-
 	$arrayRuangan = $_SESSION["arrayRuangan"];
 	$indexRuangan = $_SESSION["indexRuangan"];
 	$indexMatkul = $_SESSION["indexMatkul"];
@@ -25,9 +21,6 @@
 	                    $test++;
 	    return($test);
 	}
-
-	//echo cekKesalahan($arrayRuangan,$jmlRuangan,$jmlMatkul);
-
 	//fungsi kombinasi2 (untuk menghitung jumlah bentrok)
 	function kombinasi2($x) {
 	    if ($x==2)
@@ -174,7 +167,7 @@
 		$rawHtml = "";
 		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
 			if ($arrayHari[$idxHari][$idxJam]["arrayIdxRuangan"][$idxArray] == $idxRuangan) {
-				$rawHtml .= "<div class='dataperruangan " . 
+				$rawHtml .= "<div class='data " . 
 				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "'><strong>( </strong><span class='matkul'>" . "<strong>[" .
 				$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "] </strong>" .
 				$arrayHari[$idxHari][$idxJam]["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" .
@@ -344,6 +337,15 @@
 			<h3 class="jumlahbentrok">Jumlah Bentrok: <?php echo $jmlBentrok ?></h3>
 			<h3 class="jumlahbentrok">Persen Terisi: <?php echo $persenTerisi ?> %</h3>
 			
+			<form action="modifyJadwal.php" method="post">
+				<h2>Modify Jadwal</h2>
+				Matkul yang ingin dipindah:&nbsp;
+				<input type="text" name="changeMatkul" id="changeMatkul">
+				&nbsp;Pindahkan ke:&nbsp;
+				<input type="text" name="pindahKe" id="pindahKe">
+				<input type="submit">
+				<p>You can do point and click on the table to change it and click 'Submit'</p>
+			</form>			
 
 			<?php if (isset($_SESSION['JamFit'])) {
 						$JamFit = $_SESSION['JamFit'];
@@ -359,24 +361,26 @@
 					} 
 			?>
 
-
-			<form action="modifyJadwal.php" method="post">
-				<h2>Change Matkul</h2>
-				Matkul yang ingin dipindah:&nbsp;
-				<input type="text" name="changeMatkul" id="changeMatkul">
-				&nbsp;Pindahkan ke:&nbsp;
-				<input type="text" name="pindahKe" id="pindahKe"> <br>
-				<input type="submit">
-			</form>
 		</div>
 
 		<!-- PER RUANGAN -->
 		<div class="container" id="perruangan">
-			<h1 class="resulttitle" style="padding-bottom: 3em;">Jadwal Matkul Per Ruangan</h1>
+			<h1 class="resulttitle" style="padding-bottom: 1		em;">Jadwal Matkul Per Ruangan</h1>
+			<form action="modifyJadwal.php" method="post">
+				<h2>Modify Jadwal</h2>
+				Matkul yang ingin dipindah:&nbsp;
+				<input type="text" name="changeMatkul" id="changeMatkul">
+				&nbsp;Pindahkan ke:&nbsp;
+				<input type="text" name="pindahKe" id="pindahKe">
+				<input type="submit">
+				<p>You can do point and click on the table to change it and click 'Submit'</p>
+			</form>			
+
+
 			<?php foreach($arrayRuangan as $idxRuangan => $ruangan) { ?>
 				<div class='jadwalperruangan'>
 					<h2 class="resulttitle"><?php echo $indexRuangan[$idxRuangan] ?></h2>
-					<table class="tabledefault" style="width:100%">
+					<table class="tabledefault table" id = "<?php echo $indexRuangan[$idxRuangan] ?>" style="width:100%">
 						<tr class="">
 							<th class="tabledefault" style="background-color: rgba(0,0,0,0.3);">Jam \ Hari</th>
 							<th class="tableheading tabledefault">Senin</th>
@@ -391,15 +395,15 @@
 						<tr class="">
 							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
 							<td style="background-color: <?php bgCell($idxRuangan,0,$idxJam)?>";
-							class="tabledefault" id= <?php echo "senin" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
+							class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
-							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
+							class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,2,$idxJam)?>";
-							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
+							class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,3,$idxJam)?>";
-							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
+							class="tabledefault tableharijam" id= <?php echo "kamis" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,4,$idxJam)?>";
-							class="tabledefault" id= <?php echo "selasa" . $idxJam?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
+							class="tabledefault tableharijam" id= <?php echo "jumat" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
 						</tr>
 						<?php 
 
