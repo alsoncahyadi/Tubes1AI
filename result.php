@@ -193,7 +193,8 @@
 	$persenTerisi = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 
 
-//------------------------------------------------------------------------------------------------
+//-------------------------------------TABLE COLORING PART------------------------------------
+// author : ramosj.noah
 	function isCellBentrok($idxRuangan, $idxHari, $idxJam) {
 		global $arrayHari;
 		$count = 0;
@@ -207,17 +208,11 @@
 		}
 	}
 
-
 	// Konstruksi
 	$tabelwarna = array();
 	for ($i = 0 ; $i < $jmlRuangan; $i++) {
 		array_push($tabelwarna,array());
 	}
-
-
-	//$tabelwarna[1][1] = 1;
-	//$tabelwarna[1][2] = 2;
-	//$tabelwarna[1][3] = 3;
 
 	function giveColor($idx) {
 		if ($idx == 0) {
@@ -262,26 +257,22 @@
 						if ($i==0) {
 							$tabelwarna[$rgn][$i] = 1;
 							$matkulInCell++;
-							echo "IF1-", $i, " ";
 						} // Kalau atasnya putih, dan ada matkul disitu
 
+						elseif (($i>0) && ($tabelwarna[$rgn][$i-1] == 0) ) {
 							$tabelwarna[$rgn][$i] = 1;
 							$matkulInCell++;
-							echo "IF2-", $i, " ";						
 						} // Kalau atasnya bukan putih, ada matkul, dan matkulnya sama
 						elseif (($i>0) && ($tabelwarna[$rgn][$i-1] != 0) && ($arrayRuangan[$rgn][$idxMatkul][$i-1][1] == true)){
 
 							$tabelwarna[$rgn][$i] = $tabelwarna[$rgn][$i-1];
 							$matkulInCell++;
-							echo "IF3-", $i, " ";
 						} // Kalau atasnya bukan putih, ada matkul, dan matkulnya beda
 						elseif (($i>0) && ($tabelwarna[$rgn][$i-1] != 0) && ($arrayRuangan[$rgn][$idxMatkul][$i-1][1] == false)){
 							if ($tabelwarna[$rgn][$i-1] == 1) {
 								$tabelwarna[$rgn][$i] = 2;
-								echo "IF4-", $i, " ";
 							} else {
 								$tabelwarna[$rgn][$i] = 1;
-								echo "IF5-", $i, " ";
 							}
 							$matkulInCell++;
 						}
@@ -296,15 +287,11 @@
 							if ($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-11]) {
 								while ($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-1]) {
 									$i = $i-1;
-									echo "BACK ";
 								}
 								$tabelwarna[$rgn][$i]++;
 								while (($tabelwarna[$rgn][$i]==$tabelwarna[$rgn][$i-1]) || ($tabelwarna[$rgn][$i] == $tabelwarna[$rgn][$i-11])) {
-									
 									$tabelwarna[$rgn][$i]++;							
-									echo "CHANGE TO DIFF WITH PREV ";
 								}
-
 							}
 						}
 					}
@@ -319,8 +306,8 @@
 	}
 
 	tableColoring();
-
 //------------------------------------------------------------------------------------------------
+
 	?>
 	<div class="container" id="result">
 		<!-- MASTER -->
@@ -418,6 +405,14 @@
 
 						} ?>
 					</table>
+				<form action="modifyJadwal.php" method="post">
+					<h2>Change Matkul</h2>
+					Matkul yang ingin dipindah:&nbsp;
+					<input type="text" name="changeMatkul" id="changeMatkul">
+					&nbsp;Pindahkan ke:&nbsp;
+					<input type="text" name="pindahKe" id="pindahKe"> <br>
+					<input type="submit">
+				</form>
 				</div>
 			<?php } ?>
 		</div>
