@@ -7,6 +7,7 @@ include "library.php";
 //Fungsi-fungsi pendukung Hill Climbing!!
 
 //count matkul
+// mengembalikan durasi matkul
 function countMatkul($arrayRuangan,$idxRuangan,$idxMatkul) {
     $count = 0;
     for ($i=0;$i<55;$i++) {
@@ -48,77 +49,6 @@ function findWaktuMatkul($arrayRuangan,$idxMatkul,$idxRuangan) {
 
 }
 
-//prosedur geser ruangan
-//prekondisi : array memang cukup untuk bergeser sejauh $geser
-function moveRuanganPlus(&$arrayRuangan,$jmlRuangan,$idxMatkul,$geser) {
-    $lokasiMatkul = findRuanganMatkul($arrayRuangan,$idxMatkul,$jmlRuangan);
-    $waktuMatkul = findWaktuMatkul($arrayRuangan,$idxMatkul,$lokasiMatkul);
-    $jumlahJam = countMatkul($arrayRuangan,$lokasiMatkul,$idxMatkul);
-
-    //delete
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$i][1] = 0;
-            
-    //insert
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul+$geser][$idxMatkul][$waktuMatkul+$i][1] = 1;
-
-    return;
-}
-
-//prosedur geser ruangan
-//prekondisi : array memang cukup untuk bergeser sejauh $geser
-function moveRuanganMinus(&$arrayRuangan,$jmlRuangan,$idxMatkul,$geser) {
-    $lokasiMatkul = findRuanganMatkul($arrayRuangan,$idxMatkul,$jmlRuangan);
-    $waktuMatkul = findWaktuMatkul($arrayRuangan,$idxMatkul,$lokasiMatkul);
-    $jumlahJam = countMatkul($arrayRuangan,$lokasiMatkul,$idxMatkul);
-
-    //delete
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$i][1] = 0;
-    
-    //insert
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul-$geser][$idxMatkul][$waktuMatkul+$i][1] = 1;
-
-    return;
-}
-
-//prosedur geser waktu
-//prekondisi : array memang cukup untuk bergeser sejauh $geser
-function moveWaktuPlus(&$arrayRuangan,$jmlRuangan,$idxMatkul,$geser) {
-    $lokasiMatkul = findRuanganMatkul($arrayRuangan,$idxMatkul,$jmlRuangan);
-    $waktuMatkul = findWaktuMatkul($arrayRuangan,$idxMatkul,$lokasiMatkul);
-    $jumlahJam = countMatkul($arrayRuangan,$lokasiMatkul,$idxMatkul);
-
-    //delete
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$i][1] = 0;
-    
-    //insert
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$geser+$i][1] = 1;
-
-    return;
-}
-
-//prosedur geser waktu
-//prekondisi : array memang cukup untuk bergeser sejauh $geser
-function moveWaktuMinus(&$arrayRuangan,$jmlRuangan,$idxMatkul,$geser) {
-    $lokasiMatkul = findRuanganMatkul($arrayRuangan,$idxMatkul,$jmlRuangan);
-    $waktuMatkul = findWaktuMatkul($arrayRuangan,$idxMatkul,$lokasiMatkul);
-    $jumlahJam = countMatkul($arrayRuangan,$lokasiMatkul,$idxMatkul);
-
-    //delete
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$i][1] = 0;
-    
-    //insert
-    for ($i=0;$i<$jumlahJam;$i++)
-        $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul-$geser+$i][1] = 1;
-
-    return;
-}
 
 //fungsi can Allocate
 function canAllocate($arrayRuangan,$idxMatkul,$lokasiMatkul,$waktuMatkul,$jumlahJam) {
@@ -147,7 +77,7 @@ function randomMatkul(&$arrayRuangan,$idxMatkul,$jmlRuangan,$indexMatkul,$indexR
     for ($i=0;$i<$jumlahJam;$i++)
         $arrayRuangan[$lokasiMatkul][$idxMatkul][$waktuMatkul+$i][1] = 0;
     
-    $indexLokasi = array_search($indexMatkul[$idxMatkul],$arrayFile)+1;
+    $indexLokasi = $jmlRuangan*4+$idxMatkul*6+1;
     $ruangan = $arrayFile[$indexLokasi];
 
     if ($ruangan=="-")
@@ -169,9 +99,17 @@ function randomMatkul(&$arrayRuangan,$idxMatkul,$jmlRuangan,$indexMatkul,$indexR
 }
 
 //prosedur random restart
-function nextStep (&$arrayRuangan,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile) {
+function startRandom (&$arrayRuangan,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile) {
     for ($i=0;$i<$jmlMatkul;$i++)
         randomMatkul($arrayRuangan,$i,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
+
+    return;
+}
+
+//prosedur nextStep
+function nextStep (&$arrayRuangan,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile) {
+    $i = rand(0,$jmlMatkul-1);
+    randomMatkul($arrayRuangan,$i,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
 
     return;
 }
@@ -179,7 +117,7 @@ function nextStep (&$arrayRuangan,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuan
 
 //Hill Climbing Algorithm
 //Start (karena awalnya blom di tempat yang bener, di random)
-nextStep($arrayRuanganTemp,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
+startRandom($arrayRuanganTemp,$jmlMatkul,$jmlRuangan,$indexMatkul,$indexRuangan,$arrayFile);
 
 //hitung jumlah bentrok
 $jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);

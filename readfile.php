@@ -3,7 +3,7 @@
 //pastiin ada Testcase.txt. Kalo beda directory, edit-edit aja
 
 
-echo "Coba buat Struktur Data!<br><br>";
+//echo "Coba buat Struktur Data!<br><br>";
 
 //nama file
 $name = "input.txt"; // nama file
@@ -68,7 +68,7 @@ $jmlMatkul = (count($arrayFile) - ($jmlRuangan*4)) / 6;
 //close file
 fclose($file);
 
-echo "Beres baca file!!<br>";
+//echo "Beres baca file!!<br>";
 
 //echo count($arrayFile) . "<br>";
 
