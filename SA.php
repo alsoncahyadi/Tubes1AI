@@ -162,22 +162,22 @@ function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $i
 	$step = array();//posisi waktu target;
 	$tempL=$langkah;
 	$tempT=$T;
+	
 	while ($langkah!=0) 
 	{
 		$currMatkul = rand(0, $UM-1);
 		$arrayTarget = collectDomain($UR, $UW,$arrayRuangan, $currMatkul, $indexRuangan, $arrayTarget);//cari domain tempat&waktu
 		$valid = false;
+		if(sizeof($arrayTarget)>0){
+			while ($valid == false){//domain valid check
+				$step = mt_rand(0, sizeof($arrayTarget) - 1);//nyari tempat&waktu
+				$batas = $arrayTarget[$step][1] + $arrayMJ[$currMatkul];
+				if ($batas < $UW)
+					$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas-1][0] == 1);
+			}
+			$tuple = searchPosition($UR, $UW, $arrayRuangan, $indexRuangan, $currMatkul, $tuple);
 		
-		while ($valid == false && sizeof($arrayTarget)>0){//domain valid check
-			$step = mt_rand(0, sizeof($arrayTarget) - 1);//nyari tempat&waktu
-			$batas = $arrayTarget[$step][1]+$arrayMJ[$currMatkul];
-			if ($batas < $UW)
-				$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas-1][0] == 1);
-		
-		
-		$tuple = searchPosition($UR, $UW, $arrayRuangan, $indexRuangan, $currMatkul, $tuple);
-		
-		$arrayRuangan = decision($UM, $UR,$UW,$T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
+			$arrayRuangan = decision($UM, $UR,$UW,$T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
 		}
 		//unset array of domain
 		unset($arrayTarget);
@@ -200,20 +200,28 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 //Membangkitkan state atau solusi random
 
 //Simulated anneling
-$max = 6;
-while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
-{
-	$max--;
+
+//while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
+
+$max = 10;
+$pass = "";
+$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
+
+while ($cek!=0 && $max!=0){
 	$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 	$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
+	$max--;
+	$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
+	$pass = $pass." ".$cek."-".$max;
 }
+
 
 //passing
 session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan; 
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
-	
+	//$_SESSION["pass"] = $pass;
 	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 	$url .= $_SERVER['SERVER_NAME'];
 	$url .= $_SERVER['REQUEST_URI'];
