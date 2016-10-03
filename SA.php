@@ -229,6 +229,7 @@ session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan; 
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
+	$_SESSION["algorithm"] = "Simulated Annealing";
 	
 	//$_SESSION["pass"] = $pass;
 	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';

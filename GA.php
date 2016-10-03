@@ -556,6 +556,7 @@
 	$_SESSION["arrayRuangan"] = $arrayRuangan;
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
+	$_SESSION["algorithm"] = "Genetics Algorithm";
 
 	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 	$url .= $_SERVER['SERVER_NAME'];

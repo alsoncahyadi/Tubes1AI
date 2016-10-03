@@ -323,6 +323,7 @@
 	<div class="container" id="result">
 		<!-- MASTER -->
 		<div class="container" id="master">
+			<h2 class="resulttitle">Algorithm of choice: <span style="color:red;"><?php echo $_SESSION["algorithm"] ?><span></h2>
 			<h1 class="resulttitle">Jadwal Mata Kuliah dan Ruangannya</h1>
 			<?php
 			$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';

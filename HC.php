@@ -161,7 +161,7 @@ session_start();
 $_SESSION["arrayRuangan"] = $arrayRuangan;
 $_SESSION["indexRuangan"] = $indexRuangan;
 $_SESSION["indexMatkul"] = $indexMatkul;
-$_SESSION["jmlBentrok"] = $jmlBentrok;
+$_SESSION["algorithm"] = "Hill Climbing";
 
 
 $url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
