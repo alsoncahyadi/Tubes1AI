@@ -414,13 +414,13 @@
 							<td style="background-color: <?php bgCell($idxRuangan,0,$idxJam)?>";
 							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "senin" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
-							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "selasa" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 1, $idxJam)?>" id= <?php echo "selasa" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,2,$idxJam)?>";
-							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "rabu" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 2, $idxJam)?>" id= <?php echo "rabu" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,3,$idxJam)?>";
-							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "kamis" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 3, $idxJam)?>" id= <?php echo "kamis" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,4,$idxJam)?>";
-							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "jumat" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 4, $idxJam)?>" id= <?php echo "jumat" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
 						</tr>
 						<?php 
 
