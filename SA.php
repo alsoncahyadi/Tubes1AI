@@ -160,6 +160,8 @@ function moveMatkul($UR,$UW,$tTempat, $tWaktu, $idxMatkul, $arrayMJ, $arrayRuang
 
 function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ){//Fungsi utama SA (tidak termasuk pembangkitan random di awal)
 	$step = array();//posisi waktu target;
+	$tempL=$langkah;
+	$tempT=$T;
 	while ($langkah!=0) 
 	{
 		$currMatkul = rand(0, $UM-1);
@@ -183,6 +185,8 @@ function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $i
 		$T --;
 		$langkah--;
 	}
+	$langkah = $tempL;
+	$T = $tempT;
 	return $arrayRuangan;	
 }
 
@@ -194,10 +198,15 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 
 
 //Membangkitkan state atau solusi random
-$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
-//Simulated anneling
-$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 
+//Simulated anneling
+$max = 6;
+while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
+{
+	$max--;
+	$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
+	$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
+}
 
 //passing
 session_start();
