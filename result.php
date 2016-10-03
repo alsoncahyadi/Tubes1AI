@@ -213,13 +213,13 @@
 		} elseif ($idx == -1) {
 			echo "red";
 		} elseif ($idx == 1) {
-			echo "#a7c6e5";
+			echo "#8edfff";
 		} elseif ($idx == 2) {
-			echo "#8df48b";
+			echo "#6bf95e";
 		} elseif ($idx == 3) {
-			echo "#f4f38b";
+			echo "#fcff5e";
 		} elseif ($idx == 4) {
-			echo "#dea7e5";
+			echo "#ff49ec";
 		}
 	}
 
