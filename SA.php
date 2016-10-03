@@ -100,7 +100,7 @@ function countProb($T, $frmE, $crrE){//ngitung peluang perpindahan
 
 function decision($UM, $UR,$UW,$T, $arrayRuangan, $idxMatkul, $idxRuangan, $waktu, $indexMatkul, $indexRuangan, $tuple, $arrayMJ){//Menentukan apakah matkul pindah jadwal/ngga, kalau memungkinkan, dipindah
 	//save former state
-	$formerEnergy 	= checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
+	$formerEnergy 	= checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan) + cekKesalahan($arrayRuangan,$UR,$UM) ;
 	$tuple 			= searchPosition($UR, $UW, $arrayRuangan, $indexRuangan, $idxMatkul, $tuple);
 	
 	$formerPlace = $tuple[0];
@@ -108,7 +108,7 @@ function decision($UM, $UR,$UW,$T, $arrayRuangan, $idxMatkul, $idxRuangan, $wakt
 		
 	//trial-move
 	$arrayRuangan 	= moveMatkul($UR,$UW,$idxRuangan, $waktu, $idxMatkul, $arrayMJ, $arrayRuangan, $indexRuangan, $tuple, $indexMatkul);
-	$currEnergy 	= checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
+	$currEnergy 	= checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan) + cekKesalahan($arrayRuangan,$UR,$UM) ;
 
 	if ($formerEnergy <= $currEnergy)
 	{
@@ -171,9 +171,20 @@ function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $i
 		if(sizeof($arrayTarget)>0){
 			while ($valid == false){//domain valid check
 				$step = mt_rand(0, sizeof($arrayTarget) - 1);//nyari tempat&waktu
-				$batas = $arrayTarget[$step][1] + $arrayMJ[$currMatkul];
+				$batas = $arrayTarget[$step][1] + $arrayMJ[$currMatkul]-1;
 				if ($batas < $UW)
-					$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas-1][0] == 1);
+				{
+					$bisa=true;
+					for ($i=0; $i<$arrayMJ[$currMatkul]; $i++){
+						if ($bisa==true && $arrayRuangan[$arrayTarget[$step][0]][$currMatkul][($arrayTarget[$step][1])+$i][0] == 0){
+							$bisa = false;
+						}
+					}
+					$valid = $bisa;
+				}
+				
+				
+				//$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas][0] == 1 && $arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$arrayTarget[$step][1]][0] == 1);
 			}
 			$tuple = searchPosition($UR, $UW, $arrayRuangan, $indexRuangan, $currMatkul, $tuple);
 		
@@ -204,23 +215,21 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 //while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
 
 $max = 3;
-$pass = "";
-$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
+$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)+cekKesalahan($arrayRuangan,$UR,$UM) ;
 
 while ($cek!=0 && $max!=0){
 	$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 	$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 	$max--;
-	$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
-	$pass = $pass." ".$cek."-".$max;
+	$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan) + cekKesalahan($arrayRuangan,$UR,$UM) ;
 }
-
 
 //passing
 session_start();
 	$_SESSION["arrayRuangan"] = $arrayRuangan; 
 	$_SESSION["indexRuangan"] = $indexRuangan;
 	$_SESSION["indexMatkul"] = $indexMatkul;
+	
 	//$_SESSION["pass"] = $pass;
 	$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 	$url .= $_SERVER['SERVER_NAME'];
