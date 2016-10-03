@@ -176,3 +176,8 @@ strong, span {
 .number {
 	width:65px;
 }
+
+.harijamdisabled {
+	background-color: rgba(0,0,0,0.5) !important;
+	z-index: 100;
+}

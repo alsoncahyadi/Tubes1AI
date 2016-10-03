@@ -151,9 +151,12 @@
 
 	function echoRawHtml($idxHari, $idxJam) {
 		global $arrayHari;
+		global $arrayRuangan;
 		$rawHtml = "";
+
 		foreach($arrayHari[$idxHari][$idxJam]["arrayMatkul"] as $idxArray => $matkul) {
-			$rawHtml .= "<div class='data " . 
+			$rawHtml .= //"<div class ='" . $disabled . "'>" .
+			"<div class='data " . 
 			$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "' id=''><strong>( </strong><span class='matkul'>" . "<strong>[" .
 			$arrayHari[$idxHari][$idxJam]["arrayIdxMatkul"][$idxArray] . "] </strong>" .
 			$arrayHari[$idxHari][$idxJam]["arrayMatkul"][$idxArray] . "</span><strong> )</strong> - <span class='ruangan'>" .
@@ -184,6 +187,21 @@
 	}
 	$jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
 	$persenTerisi = persenTerisi($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);
+
+	function echoIsDisabled($idxRuangan, $idxHari, $idxJam) {
+		global $arrayRuangan;
+		global $jmlMatkul;
+		$disabled = "";
+		if (!$arrayRuangan
+			[$idxRuangan]
+			[$jmlMatkul]
+			[$idxJam + ($idxHari * 11)]
+			[0])
+		{
+			$disabled = "harijamdisabled";
+		}
+		echo $disabled;
+	}
 
 
 //-------------------------------------TABLE COLORING PART------------------------------------
@@ -325,7 +343,6 @@
 				<tr class="">
 					
 					<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
-
 					<td class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam ?>><?php echoRawHtml(0,$idxJam) ?></td>
 					<td class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam ?>><?php echoRawHtml(1,$idxJam) ?></td>
 					<td class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam ?>><?php echoRawHtml(2,$idxJam) ?></td>
@@ -340,9 +357,9 @@
 			<form action="modifyJadwal.php" method="post">
 				<h2>Modify Jadwal</h2>
 				Matkul yang ingin dipindah:&nbsp;
-				<input type="text" name="changeMatkul" id="changeMatkul">
+				<input type="text" name="changeMatkul" id="changeMatkul" readonly>
 				&nbsp;Pindahkan ke:&nbsp;
-				<input type="text" name="pindahKe" id="pindahKe">
+				<input type="text" name="pindahKe" id="pindahKe" readonly>
 				<input type="submit">
 				<p>You can do point and click on the table to change it and click 'Submit'</p>
 			</form>			
@@ -369,9 +386,9 @@
 			<form action="modifyJadwal.php" method="post">
 				<h2>Modify Jadwal</h2>
 				Matkul yang ingin dipindah:&nbsp;
-				<input type="text" name="changeMatkul" id="changeMatkul">
+				<input type="text" name="changeMatkul" id="changeMatkul" readonly>
 				&nbsp;Pindahkan ke:&nbsp;
-				<input type="text" name="pindahKe" id="pindahKe">
+				<input type="text" name="pindahKe" id="pindahKe" readonly>
 				<input type="submit">
 				<p>You can do point and click on the table to change it and click 'Submit'</p>
 			</form>			
@@ -395,15 +412,15 @@
 						<tr class="">
 							<td class="tablejam" id="jam"> <?php echo $idxJam+7 . ":00&nbsp;" . "(" . $idxJam . ")&nbsp;" ?> </td>
 							<td style="background-color: <?php bgCell($idxRuangan,0,$idxJam)?>";
-							class="tabledefault tableharijam" id= <?php echo "senin" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "senin" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,0,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,1,$idxJam)?>";
-							class="tabledefault tableharijam" id= <?php echo "selasa" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "selasa" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,1,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,2,$idxJam)?>";
-							class="tabledefault tableharijam" id= <?php echo "rabu" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "rabu" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,2,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,3,$idxJam)?>";
-							class="tabledefault tableharijam" id= <?php echo "kamis" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "kamis" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,3,$idxJam)?></td>
 							<td style="background-color: <?php bgCell($idxRuangan,4,$idxJam)?>";
-							class="tabledefault tableharijam" id= <?php echo "jumat" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
+							class="tabledefault tableharijam <?php echo echoIsDisabled($idxRuangan, 0, $idxJam)?>" id= <?php echo "jumat" . $idxJam."-".$idxRuangan?>><?php echoRawHtmlPerRuangan($idxRuangan,4,$idxJam)?></td>
 						</tr>
 						<?php 
 
