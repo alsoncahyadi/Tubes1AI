@@ -203,7 +203,7 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 
 //while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
 
-$max = 10;
+$max = 3;
 $pass = "";
 $cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan);
 
