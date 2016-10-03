@@ -42,22 +42,28 @@ function generateRandomStart($UM, $UR, $UW, $arrayRuangan, $indexMatkul, $indexR
 	//placement
 	for ($i=0;$i<$UM;$i++){
 		$arrayTarget = collectDomain($UR, $UW, $arrayRuangan, $i, $indexRuangan, $arrayTarget);
-		//waktu&tempat random
-		$randVal = rand(0, sizeof($arrayTarget[$i])-1);
-		$ruangan = $arrayTarget[$randVal][0];
-		$waktu = $arrayTarget[$randVal][1];
 		
-		for ($j=0; $j<$arrayMJ[$i];$j++){
-			$arrayRuangan[$ruangan][$i][$waktu][1]=1;
-			$waktu++;
+		//waktu&tempat random
+		if (sizeof($arrayTarget)>0){
+			$randVal = rand(0, sizeof($arrayTarget)-1);
+			
+			$ruangan = $arrayTarget[$randVal][0];
+			$waktu = $arrayTarget[$randVal][1];
+		
+			for ($j=0; $j<$arrayMJ[$i];$j++){
+				$arrayRuangan[$ruangan][$i][$waktu][1]=1;
+				$waktu++;
+			}
 		}
 		unset($arrayTarget);
 		$arrayTarget = array();
+		
 	}
 	return $arrayRuangan;
 }
 
 function varMat_Jam($UW,$UM, $arrayMJ, $arrayRuangan, $indexMatkul){//Menghitung durasi permatkul dan menyimpan datanya di array
+	
 	for ($k=0;$k<$UM;$k++){
 		$jml = 0;
 		$i =0;
@@ -67,6 +73,7 @@ function varMat_Jam($UW,$UM, $arrayMJ, $arrayRuangan, $indexMatkul){//Menghitung
 			$jml++;
 		}
 		$arrayMJ[$k]=$jml;
+		
 	}
 	return $arrayMJ;
 }
@@ -159,16 +166,17 @@ function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $i
 		$arrayTarget = collectDomain($UR, $UW,$arrayRuangan, $currMatkul, $indexRuangan, $arrayTarget);//cari domain tempat&waktu
 		$valid = false;
 		
-		while ($valid == false){//domain valid check
+		while ($valid == false && sizeof($arrayTarget)>0){//domain valid check
 			$step = mt_rand(0, sizeof($arrayTarget) - 1);//nyari tempat&waktu
 			$batas = $arrayTarget[$step][1]+$arrayMJ[$currMatkul];
 			if ($batas < $UW)
 				$valid = ($arrayRuangan[$arrayTarget[$step][0]][$currMatkul][$batas-1][0] == 1);
-		}
+		
 		
 		$tuple = searchPosition($UR, $UW, $arrayRuangan, $indexRuangan, $currMatkul, $tuple);
-		$arrayRuangan = decision($UM, $UR,$UW,$T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
 		
+		$arrayRuangan = decision($UM, $UR,$UW,$T, $arrayRuangan, $currMatkul, $arrayTarget[$step][0], $arrayTarget[$step][1],  $indexMatkul, $indexRuangan, $tuple, $arrayMJ);
+		}
 		//unset array of domain
 		unset($arrayTarget);
 		$arrayTarget = array();
@@ -184,10 +192,12 @@ function SimAnneling($langkah, $UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $i
 //Menghitung durasi per matkul dan menyimpan datanya di arrayMJ
 $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul); 
 
+
 //Membangkitkan state atau solusi random
 $arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 //Simulated anneling
 $arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
+
 
 //passing
 session_start();
