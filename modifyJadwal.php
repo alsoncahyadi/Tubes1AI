@@ -25,6 +25,9 @@ foreach ($arrayRuangan as $idxRuangan => $ruangan) {
 
 if (strpos($harijam, '-')==true) {
 	$Ruangan = $harijam[strpos($harijam,'-')+1];
+	if (isset($harijam[strpos($harijam,'-')+2])) {
+		$Ruangan = $Ruangan*10 + $harijam[strpos($harijam,'-')+2];
+	}
 }
 
 

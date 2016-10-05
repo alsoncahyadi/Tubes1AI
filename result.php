@@ -200,7 +200,7 @@
 		{
 			$disabled = "harijamdisabled";
 		}
-		echo $disabled;
+		//echo $disabled;
 	}
 
 
