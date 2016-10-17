@@ -67,9 +67,12 @@
 		$total = 0;
 		for ($i=0;$i<$jmlRuangan;$i++)
 		    for ($k=0;$k<55;$k++) {
-		         for ($j=0;$j<$jmlMatkul+1;$j++) {
+		    	$count = 0;
+		         for ($j=0;$j<$jmlMatkul+1;$j++) {		 
 		            //hitung terisi
-		            $terisi += $arrayRuangan[$i][$j][$k][1];
+		            $count += $arrayRuangan[$i][$j][$k][1];
+		            if ($count>0)
+		            	$terisi ++;
 			    }
 		    	//hitung total
 		        $total += $arrayRuangan[$i][$jmlMatkul][$k][0];
@@ -200,7 +203,7 @@
 		{
 			$disabled = "harijamdisabled";
 		}
-		//echo $disabled;
+		echo $disabled;
 	}
 
 
@@ -323,7 +326,6 @@
 	<div class="container" id="result">
 		<!-- MASTER -->
 		<div class="container" id="master">
-			<h2 class="resulttitle">Algorithm of choice: <span style="color:red;"><?php echo $_SESSION["algorithm"] ?><span></h2>
 			<h1 class="resulttitle">Jadwal Mata Kuliah dan Ruangannya</h1>
 			<?php
 			$url  = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';

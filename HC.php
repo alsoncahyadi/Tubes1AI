@@ -151,6 +151,7 @@ while (($jmlLangkah < $jmlLangkahMax) and ($jmlBentrok!==0)) {
 
     //increment jmlh langkah
     $jmlLangkah++;
+    //echo $jmlBentrok . "<br>";
 }
 
 $jmlBentrok = cekAllBentrok($arrayRuangan,$jmlRuangan,$jmlMatkul,$indexRuangan);

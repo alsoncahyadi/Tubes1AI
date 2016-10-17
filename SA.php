@@ -214,11 +214,11 @@ $arrayMJ = varMat_Jam($UW,$UM,$arrayMJ, $arrayRuangan, $indexMatkul);
 
 //while (checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)!=0 && $max>0)
 
-$max = 3;
+$max = 1;
 $cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan)+cekKesalahan($arrayRuangan,$UR,$UM) ;
 
 while ($cek!=0 && $max!=0){
-	$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
+	//$arrayRuangan = generateRandomStart($UM, $UR, $UW,$arrayRuangan, $indexMatkul, $indexRuangan, $arrayMJ, $arrayTarget);
 	$arrayRuangan = SimAnneling($langkah,$UM, $UR, $UW,$T, $arrayRuangan, $indexMatkul, $indexRuangan, $arrayTarget, $tuple, $arrayMJ);
 	$max--;
 	$cek = checkMultiple($UM, $UR,$UW, $arrayRuangan, $indexMatkul,$indexRuangan) + cekKesalahan($arrayRuangan,$UR,$UM) ;

@@ -6,7 +6,7 @@
 //echo "Coba buat Struktur Data!<br><br>";
 
 //nama file
-$name = "input2.txt"; // nama file
+$name = "input.txt"; // nama file
 
 //open file
 $file = fopen($name,"r");
